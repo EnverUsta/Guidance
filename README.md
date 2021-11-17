@@ -15,6 +15,8 @@ Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliş
  2. Veri tabanı modellemesinin efektif yapılması.
  3. Temiz, sürdürülebilir ve performanslı kod yazılması.
 
+# Ekip Şeması
+![team organization](https://user-images.githubusercontent.com/35155252/142272574-7d03e9a3-8d89-4090-8719-7053fed97f5b.png)
 
 
 
