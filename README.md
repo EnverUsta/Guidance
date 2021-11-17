@@ -1,3 +1,5 @@
+# Proje İsmi: Guidance
+
 ## Proje Konusu
 Turistler gideceği şehri ve gezi tarihini seçerek o şehirde bulunan rehberlerden birini seçer. Bu rehberler o şehirde ikamet eden ve İngilizce bilen  lise öğrencilerinden oluşmaktadır. Seçim yapıldıktan sonra rehbere bir iletişim isteği gider. Rehberin isteği kabul etmesi halinde turist ve rehber mesaj yoluyla anlaşır.  Turist bütün rehberlerle konuşarak istediği biriyle anlaşabilir. Uygulama üzerinden iki tarafında onayı ile anlaşma sağlanır. Belirtilen tarihte yine uygulama üzerinden iletişime geçilerek turist ve rehberin buluşması sağlanır. 
 
