@@ -11,7 +11,7 @@ Turistler gideceği şehri ve gezi tarihini seçerek o şehirde bulunan rehberle
 ## Projenin Kapsamı
 Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliştirme kiti olan Flutter kullanılacaktır. Back-end kısmında ise yine Google tarafından geliştirilen Dart dili kullanılacaktır. Uygulamadaki veriler yerel ve uzak sunucularda tutulacaktır. Yerel verilerin tutulması için SQLite, uzak verilerin tutulması için ise Firebase kullanılacaktır.
 
-## Başarı Ölçütleri
+## Projenin Başarı Ölçütleri
 
  1. Tasarımların eksiksiz, kullanıcı dostu ve çeşitli cihazlarda minimumdan maksimum ekran boyutuna kadar iyi görüntülenmesini (responsive) sağlamak.
  2. Veri tabanı modellemesinin efektif yapılması.
