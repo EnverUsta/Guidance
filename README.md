@@ -19,3 +19,6 @@ Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliş
 
 # Ekip Şeması
 ![team organization](https://user-images.githubusercontent.com/35155252/142272574-7d03e9a3-8d89-4090-8719-7053fed97f5b.png)
+
+# İş Zaman Çizelgesi
+![image](https://user-images.githubusercontent.com/35155252/142296364-3c1104a9-97a7-45c4-82fe-f0151c78ee80.png)
