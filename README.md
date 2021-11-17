@@ -19,36 +19,3 @@ Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliş
 
 # Ekip Şeması
 ![team organization](https://user-images.githubusercontent.com/35155252/142272574-7d03e9a3-8d89-4090-8719-7053fed97f5b.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# guidance
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
