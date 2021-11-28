@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/screens/login.dart';
 
-class RoleSelector extends StatefulWidget {
-  const RoleSelector({Key? key}) : super(key: key);
+class RoleSelectorScreen extends StatefulWidget {
+  const RoleSelectorScreen({Key? key}) : super(key: key);
 
   @override
-  State<RoleSelector> createState() => _RoleSelectorState();
+  State<RoleSelectorScreen> createState() => _RoleSelectorScreenState();
 }
 
-class _RoleSelectorState extends State<RoleSelector> {
+class _RoleSelectorScreenState extends State<RoleSelectorScreen> {
   UserRole userRole = UserRole.guide;
 
   @override
@@ -44,7 +45,13 @@ class _RoleSelectorState extends State<RoleSelector> {
               width: queryData.size.width / 1.2,
               height: queryData.size.height / 15,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Login(userRole: userRole),
+                    ),
+                  );
+                },
                 child: const Text(
                   'Go',
                   style: TextStyle(
