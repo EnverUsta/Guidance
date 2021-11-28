@@ -28,7 +28,7 @@ class _TripPlanState extends State<TripPlan> {
           title: Text("Plan Your Trip"),
         ),*/
         body: Container(
-      margin: EdgeInsets.all(40.0),
+      margin: const EdgeInsets.all(40.0),
       child: Form(
         key: planTripFormKey,
         child: Center(
@@ -36,25 +36,28 @@ class _TripPlanState extends State<TripPlan> {
             reverse: true,
             child: Column(
               children: [
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Plan Your Trip",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                  child: const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Plan Your Trip",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 30), 
+                const SizedBox(height: 10),
                 buildCountryField(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 buildCityField(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 buildLanguageField(),
-                SizedBox(height: 50),
+                const SizedBox(height: 30),
                 buildSelectDateField(),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 buildSubmitButton(),
               ],
             ),
@@ -72,16 +75,16 @@ class _TripPlanState extends State<TripPlan> {
     return DropdownButtonFormField<String>(
       value: country,
       items: countries.map(buildMenuItem).toList(),
-      onChanged: (value) => setState(() => this.country = value),
-      hint: Text("Select Country"),
+      onChanged: (value) => setState(() => country = value),
+      hint: const Text("Select Country"),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 0.2),
+          borderSide: const BorderSide(width: 0.2),
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      icon: Icon(Icons.keyboard_arrow_down),
+      icon: const Icon(Icons.keyboard_arrow_down),
       iconSize: 32,
     );
   }
@@ -94,16 +97,16 @@ class _TripPlanState extends State<TripPlan> {
     return DropdownButtonFormField<String>(
       value: city,
       items: cities.map(buildMenuItem).toList(),
-      onChanged: (value) => setState(() => this.city = value),
-      hint: Text("Select City"),
+      onChanged: (value) => setState(() => city = value),
+      hint: const Text("Select City"),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 0.2),
+          borderSide: const BorderSide(width: 0.2),
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      icon: Icon(Icons.keyboard_arrow_down),
+      icon: const Icon(Icons.keyboard_arrow_down),
       iconSize: 32,
     );
   }
@@ -116,16 +119,16 @@ class _TripPlanState extends State<TripPlan> {
     return DropdownButtonFormField<String>(
       value: language,
       items: languages.map(buildMenuItem).toList(),
-      onChanged: (value) => setState(() => this.language = value),
-      hint: Text("Select Language"),
+      onChanged: (value) => setState(() => language = value),
+      hint: const Text("Select Language"),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 0.2),
+          borderSide: const BorderSide(width: 0.2),
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      icon: Icon(Icons.keyboard_arrow_down),
+      icon: const Icon(Icons.keyboard_arrow_down),
       iconSize: 32,
     );
   }
@@ -139,8 +142,8 @@ class _TripPlanState extends State<TripPlan> {
       }
     }
 
-    return Container(
-      width: 200,
+    return SizedBox(
+      width: double.infinity,
       height: 50,
       child: ElevatedButton(
         child: Text(getText()),
@@ -161,24 +164,23 @@ class _TripPlanState extends State<TripPlan> {
             //tripTimeStr = DateFormat("dd/MM/yyyy").format(tripDateTime!);
           });
         },
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            backgroundColor:
-                MaterialStateProperty.all(const Color(0xFF7AAC5D))),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
       ),
     );
   }
 
   Widget buildSubmitButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      height: 100,
+      height: 50,
       child: ElevatedButton(
-        child: Text("GO"),
+        child: const Text("GO"),
         onPressed: () {
           if (planTripFormKey.currentState!.validate() &&
               tripDateTime != null) {
@@ -195,9 +197,13 @@ class _TripPlanState extends State<TripPlan> {
           }
         },
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(CircleBorder()),
-          backgroundColor: MaterialStateProperty.all(const Color(0xFF7AAC5D)),
-        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            backgroundColor:
+                MaterialStateProperty.all(const Color(0xFF7AAC5D))),
       ),
     );
   }
@@ -216,7 +222,7 @@ class _TripPlanState extends State<TripPlan> {
       value: e,
       child: Text(
         e,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 25,
         ),
