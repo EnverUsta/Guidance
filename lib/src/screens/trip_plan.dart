@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:guidance/src/models/trip.dart';
 import 'package:guidance/src/screens/empty.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 class TripPlan extends StatefulWidget {
   const TripPlan({Key? key}) : super(key: key);
@@ -28,40 +29,38 @@ class _TripPlanState extends State<TripPlan> {
           title: Text("Plan Your Trip"),
         ),*/
         body: Container(
-      margin: const EdgeInsets.all(40.0),
+      margin: EdgeInsets.symmetric(horizontal: 4.h),
+      padding:  EdgeInsets.symmetric(vertical: 10.h),
       child: Form(
         key: planTripFormKey,
         child: Center(
-          child: SingleChildScrollView(
-            reverse: true,
-            child: Column(
+          child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                  child: const Align(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 7.h),
+                  child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Plan Your Trip",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                        fontSize: 4.h,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                //const SizedBox(height: 10),
                 buildCountryField(),
-                const SizedBox(height: 10),
+                SizedBox(height: 5.h),
                 buildCityField(),
-                const SizedBox(height: 10),
+                SizedBox(height: 5.h),
                 buildLanguageField(),
-                const SizedBox(height: 30),
+                SizedBox(height: 5.h),
                 buildSelectDateField(),
-                const SizedBox(height: 50),
+                SizedBox(height: 5.h),
                 buildSubmitButton(),
               ],
             ),
-          ),
         ),
       ),
     ));
@@ -76,16 +75,20 @@ class _TripPlanState extends State<TripPlan> {
       value: country,
       items: countries.map(buildMenuItem).toList(),
       onChanged: (value) => setState(() => country = value),
-      hint: const Text("Select Country"),
+      hint: const Text(
+        "Country",
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+      ),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(width: 0.02.h),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       icon: const Icon(Icons.keyboard_arrow_down),
-      iconSize: 32,
+      iconSize: 3.5.h,
+      //style: Colors.color,
     );
   }
 
@@ -98,16 +101,19 @@ class _TripPlanState extends State<TripPlan> {
       value: city,
       items: cities.map(buildMenuItem).toList(),
       onChanged: (value) => setState(() => city = value),
-      hint: const Text("Select City"),
+      hint: const Text(
+        "City",
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+      ),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(width: 0.02.h),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       icon: const Icon(Icons.keyboard_arrow_down),
-      iconSize: 32,
+      iconSize: 3.5.h,
     );
   }
 
@@ -120,23 +126,26 @@ class _TripPlanState extends State<TripPlan> {
       value: language,
       items: languages.map(buildMenuItem).toList(),
       onChanged: (value) => setState(() => language = value),
-      hint: const Text("Select Language"),
+      hint: const Text(
+        "Language",
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+      ),
       validator: (value) => value == null ? 'Field Required' : null,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(width: 0.02.h),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       icon: const Icon(Icons.keyboard_arrow_down),
-      iconSize: 32,
+      iconSize: 3.5.h,
     );
   }
 
   Widget buildSelectDateField() {
-    String getText() {
+    String getDateText() {
       if (tripDateTime == null) {
-        return "Select Trip Date";
+        return "Select Date";
       } else {
         return DateFormat("dd/MM/yyyy").format(tripDateTime!);
       }
@@ -144,15 +153,19 @@ class _TripPlanState extends State<TripPlan> {
 
     return SizedBox(
       width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        child: Text(getText()),
+      height: 7.h,
+      child: OutlinedButton(
+        child: Text(
+          getDateText(),
+          style: TextStyle(fontSize: 2.2.h),
+        ),
         onPressed: () async {
           DateTime? date = await showDatePicker(
             context: context,
             initialDate: tripDateTime ?? DateTime.now(),
             firstDate: DateTime.now(),
-            lastDate: DateTime(2022),
+            lastDate: DateTime(DateTime.now().year, DateTime.now().month + 3,
+                DateTime.now().day),
             helpText: "Select Trip Date",
             fieldLabelText: 'Trip date',
             fieldHintText: 'Month/Day/Year',
@@ -178,9 +191,13 @@ class _TripPlanState extends State<TripPlan> {
   Widget buildSubmitButton() {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 7.h,
       child: ElevatedButton(
-        child: const Text("GO"),
+        child: Text(
+          "GO",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 4.h),
+        ),
         onPressed: () {
           if (planTripFormKey.currentState!.validate() &&
               tripDateTime != null) {
@@ -208,6 +225,7 @@ class _TripPlanState extends State<TripPlan> {
     );
   }
 
+// failed for now
   Widget createDropDownButton(String? item, List<String> items, String name) {
     return DropdownButton<String>(
       value: item,
@@ -222,9 +240,9 @@ class _TripPlanState extends State<TripPlan> {
       value: e,
       child: Text(
         e,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 25,
+          fontSize: 3.h,
         ),
       ),
     );

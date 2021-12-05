@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/screens/trip_plan.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +11,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Guidance',
-      home: TripPlan(),
+    return Sizer(
+      builder: (BuildContext context, Orientation orientation,
+          DeviceType deviceType) {
+        return MaterialApp(
+          title: 'Guidance',
+          home: TripPlan(),
+        );
+      },
     );
   }
 }
