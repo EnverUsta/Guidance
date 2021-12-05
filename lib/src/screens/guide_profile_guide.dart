@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
+import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 class GuideProfileForGuide extends StatefulWidget {
@@ -20,6 +21,14 @@ class GuideProfileForGuide extends StatefulWidget {
 
 class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   var editToggle = false;
+  List<String> list = [
+    "Swim",
+    "Dance",
+    "Books",
+    "test",
+    "aaaa",
+    "bbbb",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +46,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
             _buildIntroduction(),
             _buildHobbiesText(),
             _buildHobbyItems(),
-            Visibility(visible: editToggle, child: _buildSaveButton()),
+            Visibility(visible: editToggle, child: _buildAddButton()),
           ],
         ),
       ),
@@ -176,50 +185,89 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildHobbyItems() {
-    List<String> list = [
-      "Swim",
-      "Dance",
-      "Books",
-      "test",
-      "aaaa",
-      "bbbb",
-    ];
-    return SizedBox(
+    return Container(
       height: 4.5.h,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
+          key: Key(list.length.toString()),
           itemCount: list.length,
           itemBuilder: (context, index) {
             return InkWell(
               child: Align(
                 alignment: Alignment.center,
-                child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 1.w),
-                  color: AppColors.fireOpal,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: SizedBox(
-                    height: 4.5.h,
-                    width: 20.w,
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 1.0.w, right: 1.0.w),
-                        child: Text(
-                          list[index],
-                          style: GoogleFonts.nunito(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                child: itemCard(list, index),
               ),
             );
           }),
     );
+  }
+
+  Widget itemCard(List<String> list, int index) {
+    if (editToggle) {
+      return Card(
+        margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 1.w),
+        color: AppColors.fireOpal,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: SizedBox(
+          height: 4.5.h,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2.0.w),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 1.8.w, right: 1.w),
+                  width: 15.w,
+                  child: TextFormField(
+                    initialValue: list[index],
+                    onFieldSubmitted: (value) => print(value),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 5.w),
+                        border: InputBorder.none),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => setState(() {
+                    list.removeAt(index);
+                  }),
+                  constraints: const BoxConstraints(maxWidth: 20),
+                  icon: const Icon(Icons.highlight_off, color: Colors.white),
+                  padding: const EdgeInsets.symmetric(vertical: 1.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Card(
+        margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 1.w),
+        color: AppColors.fireOpal,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: SizedBox(
+          height: 4.5.h,
+          width: 20.w,
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.only(left: 1.0.w, right: 1.0.w),
+              child: Text(
+                list[index],
+                style: GoogleFonts.nunito(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildHobbiesText() {
@@ -241,7 +289,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildAddButton() {
     return Container(
       width: 100.w,
       height: 8.h,
@@ -253,11 +301,15 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
           ),
           primary: AppColors.budGreen,
         ),
-        onPressed: () {},
+        onPressed: () => setState(() {
+          TextFieldAlertDialog(list: list);
+        }),
         child: Text(
-          "Save",
+          "Add",
           style: GoogleFonts.nunito(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
       ),
     );
