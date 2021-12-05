@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -19,12 +20,12 @@ class _ChatPageState extends State<ChatPage> {
         ),*/
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.all(0.0),
+          margin: EdgeInsets.all(2.h),
           child: Column(
             children: [
               upperBarBuilder(),
-              const SizedBox(
-                height: 12,
+              SizedBox(
+                height: 4.h,
               ),
               chatBodyBuilder(),
               textBoxBuilder(),
@@ -36,85 +37,104 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget upperBarBuilder() {
-    return Container(
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
+    Widget backButton() {
+      return IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.arrow_back, color: Colors.black, size: 9.w),
+      );
+    }
+
+    Widget avatarImage() {
+      return SizedBox(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Container(
+            color: Colors.blue,
+            child: Icon(Icons.volume_up,
+                color: Colors.black,
+                size: MediaQuery.of(context).size.height *
+                    0.10), //change with profile photo
           ),
-          const SizedBox(
-            width: 2,
+        ),
+      );
+    }
+
+    Widget userName() {
+      return SizedBox(
+        width: 45.w,
+        child: Text(
+          "Ahmet Huzeyfe Demir",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 5.w),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+    }
+
+    Widget dealStatusButtons() {
+      return Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              shadowColor: Colors.white,
+              primary: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: Icon(
+              Icons.check,
+              color: Colors.white,
+              size: 5.h,
+            ),
           ),
           SizedBox(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Container(
-                color: Colors.blue,
-                child: Icon(Icons.volume_up,
-                    color: Colors.black,
-                    size: MediaQuery.of(context).size.height * 0.10), //change with profile photo
+            width: 5.w,
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              shadowColor: Colors.white,
+              primary: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Ahmet Huzeyfe Demir",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.white,
-                      primary: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.white,
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            child: Icon(
+              Icons.close,
+              color: Colors.white,
+              size: 5.h,
+            ),
           ),
         ],
-      ),
+      );
+    }
+
+    return Row(
+      children: [
+        backButton(),
+        SizedBox(
+          width: 1.w,
+        ),
+        avatarImage(),
+        SizedBox(
+          width: 6.w,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            userName(),
+            SizedBox(
+              height: 1.h,
+            ),
+            dealStatusButtons(),
+          ],
+        ),
+      ],
     );
   }
 
@@ -130,6 +150,54 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget textBoxBuilder() {
     TextEditingController _messageController = TextEditingController();
+
+    Widget textBox() {
+      return Expanded(
+        child: Container(
+          alignment: Alignment.bottomLeft,
+          //width: MediaQuery.of(context).size.width * 0.8,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                  width: 0.05.w, color: Colors.grey, style: BorderStyle.solid)),
+          child: TextField(
+            //keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.sentences,
+            minLines: 1,
+            maxLines: 5,
+            controller: _messageController,
+            decoration: InputDecoration(
+                hintText: 'Write a message',
+                contentPadding: EdgeInsets.all(4.2.w),
+                border: InputBorder.none),
+            //onChanged: (value) {},
+          ),
+        ),
+      );
+    }
+
+    Widget sendButton() {
+      return Container(
+        alignment: Alignment.bottomRight,
+        child: IconButton(
+          onPressed: () {
+            //print(messageController.text); =
+            _messageController.text = _messageController.text.trim();
+            if (_messageController.text.isNotEmpty) {
+              setState(() {
+                message = _messageController.text;
+              });
+              _messageController.clear();
+            }
+          },
+          icon: const Icon(
+            Icons.send,
+            color: Colors.black,
+          ),
+        ),
+      );
+    }
+
     return SizedBox(
       //height: MediaQuery.of(context).size.height * 0.1,
       child: Stack(
@@ -137,54 +205,16 @@ class _ChatPageState extends State<ChatPage> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+              padding: EdgeInsets.only(
+                bottom: 1.h,
+                top: 2.h,
+              ),
               width: double.infinity,
               color: Colors.white,
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.bottomLeft,
-                      //width: MediaQuery.of(context).size.width * 0.8,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              width: 1,
-                              color: Colors.grey,
-                              style: BorderStyle.solid)),
-                      child: TextField(
-                        //keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        minLines: 1,
-                        maxLines: 5,
-                        controller: _messageController,
-                        decoration: InputDecoration(
-                            hintText: 'Write a message',
-                            contentPadding: EdgeInsets.all(15),
-                            border: InputBorder.none),
-                        //onChanged: (value) {},
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: IconButton(
-                      onPressed: () {
-                        //print(messageController.text); =
-                        _messageController.text =
-                            _messageController.text.trim();
-                        if (_messageController.text.isNotEmpty) {
-                          setState(() {
-                            message = _messageController.text;
-                          });
-                          _messageController.clear();
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.send,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  textBox(),
+                  sendButton(),
                 ],
               ),
             ),
