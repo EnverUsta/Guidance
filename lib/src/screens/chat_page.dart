@@ -9,8 +9,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  int dealStatus = 0;
+  int dealStatus = 0; // accep:1, decline:-1, nothing:0
+  Color acceptButtonColor = Colors.green;
+  Color declineButtonColor = Colors.red;
   late String message = "";
+
   @override
   Widget build(BuildContext context) {
     //var screenSize = MediaQuery.of(context).size;
@@ -37,6 +40,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget upperBarBuilder() {
+
     Widget backButton() {
       return IconButton(
         onPressed: () {
@@ -52,10 +56,9 @@ class _ChatPageState extends State<ChatPage> {
           borderRadius: BorderRadius.circular(10.0),
           child: Container(
             color: Colors.blue,
-            child: Icon(Icons.volume_up,
+            child: Icon(Icons.image,
                 color: Colors.black,
-                size: MediaQuery.of(context).size.height *
-                    0.10), //change with profile photo
+                size: 10.h), //change with profile photo
           ),
         ),
       );
@@ -73,14 +76,33 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
+    void acceptButton(){
+      if(dealStatus == 0){
+        dealStatus = 1;
+        setState(() {
+          declineButtonColor = Colors.grey;
+        });
+      }
+    }
+
+    void declineButton(){
+      if(dealStatus == 0){
+        dealStatus = -1;
+        print("Send message: ");
+        setState(() {
+          declineButtonColor = Colors.grey;
+        });
+      }
+    }
+
     Widget dealStatusButtons() {
       return Row(
         children: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: acceptButton,
             style: ElevatedButton.styleFrom(
               shadowColor: Colors.white,
-              primary: Colors.green,
+              primary: acceptButtonColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -95,10 +117,10 @@ class _ChatPageState extends State<ChatPage> {
             width: 5.w,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: declineButton,
             style: ElevatedButton.styleFrom(
               shadowColor: Colors.white,
-              primary: Colors.red,
+              primary: declineButtonColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
