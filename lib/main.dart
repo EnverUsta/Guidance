@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/screens/trip_plan.dart';
 import 'package:sizer/sizer.dart';
