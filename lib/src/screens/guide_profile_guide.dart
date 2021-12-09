@@ -92,7 +92,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
           ),
           //End of Profile image area
           //Using container for responsive widget (sizer package usage)
-          Container(child: SizedBox(width: 3.5.w)),
+          SizedBox(width: 3.5.w),
           //Profile name and desc area
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +118,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
           ),
           //End of Profile name end desc area
           //Using container for responsive widget (sizer package usage)
-          Container(child: SizedBox(width: 3.5.w)),
+          SizedBox(width: 3.5.w),
           //Edit button
           Container(
             height: 6.h,
@@ -185,7 +185,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildHobbyItems() {
-    return Container(
+    return SizedBox(
       height: 4.5.h,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -222,7 +222,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
                   width: 15.w,
                   child: TextFormField(
                     initialValue: list[index],
-                    onFieldSubmitted: (value) => print(value),
+                    onFieldSubmitted: (value) => {},
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5.w),
                         border: InputBorder.none),
