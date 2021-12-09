@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:guidance/src/constants/user_role.dart';
 import 'package:sizer/sizer.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key, required this.userRole}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key, required this.userRole}) : super(key: key);
   final UserRole userRole;
 
   @override
-  _SignupState createState() => _SignupState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'English';
 
