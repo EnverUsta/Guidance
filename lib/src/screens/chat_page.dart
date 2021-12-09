@@ -40,7 +40,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget upperBarBuilder() {
-
     Widget backButton() {
       return IconButton(
         onPressed: () {
@@ -57,8 +56,7 @@ class _ChatPageState extends State<ChatPage> {
           child: Container(
             color: Colors.blue,
             child: Icon(Icons.image,
-                color: Colors.black,
-                size: 10.h), //change with profile photo
+                color: Colors.black, size: 10.h), //change with profile photo
           ),
         ),
       );
@@ -76,8 +74,8 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
-    void acceptButton(){
-      if(dealStatus == 0){
+    void acceptButton() {
+      if (dealStatus == 0) {
         dealStatus = 1;
         setState(() {
           declineButtonColor = Colors.grey;
@@ -85,10 +83,9 @@ class _ChatPageState extends State<ChatPage> {
       }
     }
 
-    void declineButton(){
-      if(dealStatus == 0){
+    void declineButton() {
+      if (dealStatus == 0) {
         dealStatus = -1;
-        print("Send message: ");
         setState(() {
           declineButtonColor = Colors.grey;
         });
