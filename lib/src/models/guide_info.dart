@@ -2,14 +2,14 @@ import 'package:guidance/src/models/enum/english_level.dart';
 
 import 'enum/english_level.dart';
 
-class Guide_Info {
-  final int userId;
+class GuideInfo {
+  final String userId;
   final String school;
   final String introducion;
   final String hobbies;
   final EnglishLevel englishLevel;
 
-  Guide_Info({
+  GuideInfo({
     required this.userId,
     required this.school,
     required this.introducion,

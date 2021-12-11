@@ -1,11 +1,9 @@
-import 'package:guidance/src/models/conversation.dart';
-
-import 'conversation.dart';
+import 'trip.dart';
 import 'enum/deal_status.dart';
 
 class Deal {
-  final id;
-  final Conversation conversation;
+  final String id;
+  final Trip trip;
   final String dealDate;
   final DealStatus dealStatus;
   final String ctime;
@@ -13,7 +11,7 @@ class Deal {
 
   Deal({
     required this.id,
-    required this.conversation,
+    required this.trip,
     required this.dealDate,
     required this.dealStatus,
     required this.ctime,
