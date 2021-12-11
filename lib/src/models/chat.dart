@@ -15,4 +15,19 @@ class Chat {
     required this.message,
     required this.ctime,
   });
+
+  Chat.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        trip = json['trip'],
+        owner = json['owner'],
+        message = json['message'],
+        ctime = json['ctime'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'trip': trip,
+        'owner': owner,
+        'message': message,
+        'ctime': ctime,
+      };
 }

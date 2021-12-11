@@ -13,4 +13,17 @@ class Address {
     required this.country,
     required this.city,
   });
+
+  Address.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        userId = json['userId'],
+        country = json['country'],
+        city = json['city'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'userId': userId,
+        'country': country,
+        'city': city,
+      };
 }

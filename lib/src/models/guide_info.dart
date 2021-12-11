@@ -16,4 +16,19 @@ class GuideInfo {
     required this.hobbies,
     required this.englishLevel,
   });
+
+  GuideInfo.fromJson(Map<String, dynamic> json)
+      : userId = json['userId'],
+        school = json['school'],
+        introducion = json['introducion'],
+        hobbies = json['hobbies'],
+        englishLevel = json['englishLevel'];
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId,
+        'school': school,
+        'introducion': introducion,
+        'hobbies': hobbies,
+        'englishLevel': englishLevel,
+      };
 }

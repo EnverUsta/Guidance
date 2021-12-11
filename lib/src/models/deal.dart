@@ -17,4 +17,21 @@ class Deal {
     required this.ctime,
     required this.utime,
   });
+
+  Deal.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        trip = json['trip'],
+        dealDate = json['dealDate'],
+        dealStatus = json['dealStatus'],
+        ctime = json['ctime'],
+        utime = json['utime'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'trip': trip,
+        'dealDate': dealDate,
+        'dealStatus': dealStatus,
+        'ctime': ctime,
+        'utime': utime,
+      };
 }
