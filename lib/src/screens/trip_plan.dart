@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guidance/src/models/trip.dart';
-import 'package:guidance/src/screens/empty.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -30,37 +28,37 @@ class _TripPlanState extends State<TripPlan> {
         ),*/
         body: Container(
       margin: EdgeInsets.symmetric(horizontal: 4.h),
-      padding:  EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Form(
         key: planTripFormKey,
         child: Center(
           child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 7.h),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Plan Your Trip",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 4.h,
-                      ),
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 7.h),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Plan Your Trip",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 4.h,
                     ),
                   ),
                 ),
-                //const SizedBox(height: 10),
-                buildCountryField(),
-                SizedBox(height: 5.h),
-                buildCityField(),
-                SizedBox(height: 5.h),
-                buildLanguageField(),
-                SizedBox(height: 5.h),
-                buildSelectDateField(),
-                SizedBox(height: 5.h),
-                buildSubmitButton(),
-              ],
-            ),
+              ),
+              //const SizedBox(height: 10),
+              buildCountryField(),
+              SizedBox(height: 5.h),
+              buildCityField(),
+              SizedBox(height: 5.h),
+              buildLanguageField(),
+              SizedBox(height: 5.h),
+              buildSelectDateField(),
+              SizedBox(height: 5.h),
+              buildSubmitButton(),
+            ],
+          ),
         ),
       ),
     ));
@@ -199,19 +197,19 @@ class _TripPlanState extends State<TripPlan> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 4.h),
         ),
         onPressed: () {
-          if (planTripFormKey.currentState!.validate() &&
-              tripDateTime != null) {
-            planTripFormKey.currentState!.save();
+          // if (planTripFormKey.currentState!.validate() &&
+          //     tripDateTime != null) {
+          //   planTripFormKey.currentState!.save();
 
-            Trip tripPlan = Trip(country!, city!, language!, tripDateTime!);
+          //   Trip tripPlan = Trip(country!, city!, language!, tripDateTime!);
 
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Empty(tripPlan)));
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => Empty(tripPlan)));
 
-            //Navigator.pop(context);
-          } else if (tripDateTime == null) {
-            showAlert(context, "Empty Field!", "Please select a date");
-          }
+          //Navigator.pop(context);
+          // } else if (tripDateTime == null) {
+          //   showAlert(context, "Empty Field!", "Please select a date");
+          // }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
