@@ -38,11 +38,7 @@ dependencies:
   flutter_svg: ^0.23.0+1
   intl: ^0.17.0
   sizer: ^2.0.15
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 58a43cce0e44a652b7210a892d747d7566c0fe2a
 dev_dependencies:
   flutter_test:
     sdk: flutter

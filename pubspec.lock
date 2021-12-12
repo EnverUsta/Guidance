@@ -347,8 +347,4 @@ packages:
     version: "5.3.1"
 sdks:
   dart: ">=2.14.0 <3.0.0"
-<<<<<<< HEAD
-  flutter: ">=1.24.0-7.0"
-=======
   flutter: ">=2.5.0"
->>>>>>> 58a43cce0e44a652b7210a892d747d7566c0fe2a
