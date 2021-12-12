@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
-import 'package:guidance/src/screens/trip_plan.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (BuildContext context, Orientation orientation,
           DeviceType deviceType) {
-        return MaterialApp(
+        return const MaterialApp(
           title: 'Guidance',
           home: RoleSelectorScreen(),
         );

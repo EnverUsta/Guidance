@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/constants/user_role.dart';
-import 'package:guidance/src/screens/login.dart';
+import 'package:guidance/src/screens/login_screen.dart';
+import 'package:sizer/sizer.dart';
 
 class RoleSelectorScreen extends StatefulWidget {
   const RoleSelectorScreen({Key? key}) : super(key: key);
@@ -14,49 +15,48 @@ class _RoleSelectorScreenState extends State<RoleSelectorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData queryData = MediaQuery.of(context);
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: queryData.size.height / 10),
-              child: const Text(
+              margin: EdgeInsets.only(bottom: 10.h),
+              child: Text(
                 'Guidance',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 48,
+                  fontSize: 30.sp,
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(queryData.size.width / 20),
+            SizedBox(
+              width: 85.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  roleCard(queryData, 'assets/images/Saly-1.png', 'Tourist'),
-                  roleCard(queryData, 'assets/images/Saly-11.png', 'Guide')
+                  roleCard('assets/images/Saly-1.png', 'Tourist'),
+                  roleCard('assets/images/Saly-11.png', 'Guide')
                 ],
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: queryData.size.height / 20),
-              width: queryData.size.width / 1.2,
-              height: queryData.size.height / 15,
+              margin: EdgeInsets.only(top: 10.h),
+              width: 85.w,
+              height: 7.h,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => Login(userRole: userRole),
+                      builder: (context) => LoginScreen(userRole: userRole),
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   'Go',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 15.sp,
                   ),
                 ),
                 style: ButtonStyle(
@@ -73,8 +73,7 @@ class _RoleSelectorScreenState extends State<RoleSelectorScreen> {
     );
   }
 
-  GestureDetector roleCard(
-      MediaQueryData queryData, String imageString, String roleName) {
+  GestureDetector roleCard(String imageString, String roleName) {
     return GestureDetector(
       onTap: () {
         if (roleName == 'Tourist') {
@@ -92,25 +91,25 @@ class _RoleSelectorScreenState extends State<RoleSelectorScreen> {
             ? const Color(0xFF7AAC5D)
             : Colors.white,
         elevation: 5,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(10),
+            Radius.circular(10.sp),
           ),
         ),
         child: Column(
           children: [
             Image.asset(
               imageString,
-              height: queryData.size.height / 4.5,
-              width: queryData.size.height / 4.5,
+              height: 18.h,
+              width: 18.h,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(2.h),
               child: Text(
                 roleName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 16.sp,
                 ),
               ),
             )
