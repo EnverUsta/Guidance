@@ -36,7 +36,7 @@ class _NavbarGuideState extends State<NavbarGuide> {
               color: Colors.black.withOpacity(0.8),
               spreadRadius: 10,
               blurRadius: 5,
-              offset: Offset(0, 7), // changes position of shadow
+              offset: const Offset(0, 7), // changes position of shadow
             ),
           ],
         ),
