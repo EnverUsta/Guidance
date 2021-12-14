@@ -3,6 +3,7 @@ import 'package:guidance/src/screens/first.dart';
 import 'package:guidance/src/screens/second.dart';
 import 'package:guidance/src/screens/third.dart';
 import 'package:guidance/src/widgets/navbar_guide.dart';
+import 'package:guidance/src/widgets/navbar_tourist.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,18 +15,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   PageController pageController = PageController();
 
+  bool isUserGuide =
+      false; //false means user is a tourist, true means user is a guide
+
+  List<Widget> guideNavList = const [FirstPage(), SecondPage(), ThirdPage()];
+  List<Widget> touristNavList = const [FirstPage(), SecondPage()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: pageController,
-        children: const [
-          FirstPage(),
-          SecondPage(),
-          ThirdPage(),
-        ],
+        children: isUserGuide ? guideNavList : touristNavList,
       ),
-      bottomNavigationBar: NavbarGuide(pageController: pageController),
+      extendBody: true,
+      bottomNavigationBar: isUserGuide
+          ? NavbarGuide(pageController: pageController)
+          : NavbarTourist(pageController: pageController),
     );
   }
 }

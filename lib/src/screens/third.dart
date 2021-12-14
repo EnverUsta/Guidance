@@ -9,13 +9,8 @@ class ThirdPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Page3'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: const Text('Go back!'),
-        ),
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.green),
       ),
     );
   }
