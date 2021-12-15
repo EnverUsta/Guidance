@@ -1,10 +1,10 @@
-import 'user.dart';
+import 'user_model.dart';
 import 'trip.dart';
 
 class Chat {
   final String id;
   final Trip trip;
-  final User owner;
+  final UserModel owner;
   final String message;
   final String ctime;
 
