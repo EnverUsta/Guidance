@@ -15,16 +15,11 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  String language = 'English';
-  String city = 'Istanbul';
-  String country = 'Turkey';
 
-
-
-  String name="";
-  String surname="";
-  String email="";
-  String password="";
+  String name = "";
+  String surname = "";
+  String email = "";
+  String password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +46,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Name',
                       ),
-                      onChanged: (value) {name=value;},
+                      onChanged: (value) {
+                        name = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -71,7 +68,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Surname',
                       ),
-                      onChanged: (value) {surname=value;},
+                      onChanged: (value) {
+                        surname = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -91,7 +90,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        email = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -111,136 +112,24 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {email=value;},
-                      validator: (value) {password=value!;},
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      validator: (value) {},
                     ),
                   ),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
-                widget.userRole == UserRole.tourist
-                    ? Card(
-                        elevation: 5,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.w,
-                            vertical: 1.h,
-                          ),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: language,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            underline: const SizedBox(),
-                            items: <String>['English']
-                                .map<DropdownMenuItem<String>>(
-                                    (String value) => DropdownMenuItem<String>(
-                                          child: Text(value),
-                                          value: value,
-                                        ))
-                                .toList(),
-                            onChanged: (newValue) {
-                              language = newValue.toString();
-                            },
-                          ),
-                        ),
-                      )
-                    : Card(
-                        elevation: 4,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5.w, vertical: 1.h),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'School',
-                            ),
-                            onChanged: (value) {},
-                            validator: (value) {},
-                          ),
-                        ),
-                      ),
-                SizedBox(
-                  height: 3.h,
-                ),
-                if (widget.userRole == UserRole.guide)
-                  Card(
-                    elevation: 5,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5.w,
-                        vertical: 1.h,
-                      ),
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: country,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        underline: const SizedBox(),
-                        items: <String>['Turkey']
-                            .map<DropdownMenuItem<String>>(
-                                (String value) => DropdownMenuItem<String>(
-                                      child: Text(value),
-                                      value: value,
-                                    ))
-                            .toList(),
-                        onChanged: (newValue) {
-                          country = newValue.toString();
-                        },
-                      ),
-                    ),
-                  ),
-                if (widget.userRole == UserRole.guide)
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                if (widget.userRole == UserRole.guide)
-                  Card(
-                    elevation: 5,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5.w,
-                        vertical: 1.h,
-                      ),
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: city,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        underline: const SizedBox(),
-                        items: <String>['Istanbul']
-                            .map<DropdownMenuItem<String>>(
-                                (String value) => DropdownMenuItem<String>(
-                                      child: Text(value),
-                                      value: value,
-                                    ))
-                            .toList(),
-                        onChanged: (newValue) {
-                          city = newValue.toString();
-                        },
-                      ),
-                    ),
-                  ),
-                if (widget.userRole == UserRole.guide)
-                  SizedBox(
-                    height: 3.h,
-                  ),
                 SizedBox(
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
                     onPressed: () {
                       final auth = AuthService();
-                      auth.registerWithEmailAndPassword(email, password, name, surname, widget.userRole);
-
+                      auth.registerWithEmailAndPassword(
+                          email, password, name, surname, widget.userRole);
                     },
                     child: const Text(
                       'Signup',
