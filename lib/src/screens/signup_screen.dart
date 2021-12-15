@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
+import 'package:guidance/src/utils/services/auth_service.dart';
+import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:sizer/sizer.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +18,13 @@ class _SignupScreenState extends State<SignupScreen> {
   String language = 'English';
   String city = 'Istanbul';
   String country = 'Turkey';
+
+
+
+  String name="";
+  String surname="";
+  String email="";
+  String password="";
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +51,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Name',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {name=value;},
                       validator: (value) {},
                     ),
                   ),
@@ -61,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Surname',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {surname=value;},
                       validator: (value) {},
                     ),
                   ),
@@ -101,8 +111,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {},
-                      validator: (value) {},
+                      onChanged: (value) {email=value;},
+                      validator: (value) {password=value!;},
                     ),
                   ),
                 ),
@@ -227,7 +237,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final auth = AuthService();
+                      auth.registerWithEmailAndPassword(email, password, name, surname, widget.userRole);
+
+                    },
                     child: const Text(
                       'Signup',
                       style: TextStyle(
