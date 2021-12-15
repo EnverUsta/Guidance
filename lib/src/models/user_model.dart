@@ -1,14 +1,14 @@
 import 'enum/user_role.dart';
 
-class User {
-  final String id;
-  final String name;
-  final String email;
-  final String birthDate;
-  final String phoneNo;
-  final List<UserRole> roles;
+class UserModel {
+  String id;
+  String name;
+  String email;
+  String birthDate;
+  String phoneNo;
+  List<UserRole> roles;
 
-  User({
+  UserModel({
     required this.id,
     required this.name,
     required this.email,
@@ -17,7 +17,7 @@ class User {
     required this.roles,
   });
 
-  User.fromJson(Map<String, dynamic> json)
+  UserModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
         email = json['email'],
