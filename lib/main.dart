@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:guidance/src/models/chat.dart';
+import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
           DeviceType deviceType) {
         return const MaterialApp(
           title: 'Guidance',
-          home: RoleSelectorScreen(),
+          home: ChatPage(),
         );
       },
     );
