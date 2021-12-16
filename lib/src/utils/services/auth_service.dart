@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
@@ -36,10 +37,19 @@ class AuthService {
   }
 
   //Sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future<bool?> signInWithEmailAndPassword(String email, String password, UserRole role) async {
     try {
       UserCredential response = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      UserModel um = await userService.getUserInfo(email);
+      print(um.id);
+      print(um.email);
+      print(um.name);
+      print(um.role);
+      
+      return um.role==role.toString() ?  true : false;
+ 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
