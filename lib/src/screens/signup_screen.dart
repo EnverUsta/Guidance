@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
+import 'package:guidance/src/utils/services/auth_service.dart';
+import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:sizer/sizer.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -12,7 +15,11 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'English';
+
+  String name = "";
+  String surname = "";
+  String email = "";
+  String password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Name',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        name = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -59,7 +68,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Surname',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        surname = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -79,7 +90,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        email = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -99,38 +112,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {},
-                      validator: (value) {},
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 3.h,
-                ),
-                Card(
-                  elevation: 5,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5.w,
-                      vertical: 1.h,
-                    ),
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      underline: const SizedBox(),
-                      items: <String>['English']
-                          .map<DropdownMenuItem<String>>(
-                              (String value) => DropdownMenuItem<String>(
-                                    child: Text(value),
-                                    value: value,
-                                  ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        dropdownValue = newValue.toString();
+                      onChanged: (value) {
+                        password = value;
                       },
+                      validator: (value) {},
                     ),
                   ),
                 ),
@@ -141,7 +126,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final auth = AuthService();
+                      auth.registerWithEmailAndPassword(
+                          email, password, name, surname, widget.userRole);
+                    },
                     child: const Text(
                       'Signup',
                       style: TextStyle(
