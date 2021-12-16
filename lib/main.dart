@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:guidance/src/screens/home.dart';
 import 'package:guidance/src/models/chat.dart';
 import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/chat_list_page.dart';
@@ -13,11 +14,13 @@ import 'package:sizer/sizer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
   
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   
   @override
   Widget build(BuildContext context) {
