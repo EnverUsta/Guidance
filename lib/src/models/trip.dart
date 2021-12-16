@@ -1,11 +1,11 @@
 import 'country.dart';
 import 'city.dart';
-import 'user.dart';
+import 'user_model.dart';
 
 class Trip {
   final String id;
-  final User guide;
-  final User tourist;
+  final UserModel guide;
+  final UserModel tourist;
   final bool guideAcceptance;
   final bool touristAcceptance;
   //Datetime --sql lite doesn't support Date or like that type
