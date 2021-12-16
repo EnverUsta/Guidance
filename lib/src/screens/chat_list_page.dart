@@ -1,99 +1,122 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/chat_model.dart';
+import 'package:guidance/src/models/myChatModel.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter_application_1/models/contact_model.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatListPage extends StatefulWidget {
+  const ChatListPage({Key? key}) : super(key: key);
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ChatListPageState createState() => _ChatListPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  static const IconData airplane_ticket_outlined =
-      IconData(0xee5e, fontFamily: 'MaterialIcons');
-  static const IconData assignment_turned_in_rounded =
-      IconData(0xf588, fontFamily: 'MaterialIcons');
-  static const IconData dangerous =
-      IconData(0xe1af, fontFamily: 'MaterialIcons');
+class _ChatListPageState extends State<ChatListPage> {
   List<ChatModel> list = ChatModel.list;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text("Chat List Page"),
-        actions: <Widget>[
-          IconButton(onPressed: null, icon: Icon(Icons.filter))
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            child: Text(
-              "Conversations",
-              style: TextStyle(fontSize: 16.sp),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 4.h),
+              padding: EdgeInsets.symmetric(vertical: 5.h),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Conversations",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 4.h,
+                  ),
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        leading: Container(
-                          width: 10.w,
-                          height: 10.w,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                            image: DecorationImage(
-                              image: ExactAssetImage("default.jpg"),
+            Expanded(
+              child: ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Card(
+                        elevation: 0,
+                        child: ListTile(
+                          onTap: () {},
+                          leading: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: 15.h,
                             ),
+                            child: Image.asset("assets/images/Saly-11.png",
+                                fit: BoxFit.cover),
+                          ),
+                          /*Container(
+                            width: 10.w,
+                            height: 10.w,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                image: ExactAssetImage("Saly-1.png"),  
+                              ),
+                            ),
+                          ),*/
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 55.w,
+                                child: Text(
+                                  list[index].contact.name,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Container(
+                                  height: 4.h,
+                                  width: 4.h,
+                                  margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: list[index].isDeal == true
+                                          ? Colors.green
+                                          : Colors.red,
+                                      shape: BoxShape.circle),
+                                  child: (list[index].isDeal == true)
+                                      ? Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: 3.5.h,
+                                        )
+                                      : Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 3.5.h,
+                                        ))
+                            ],
+                          ),
+                          subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 45.w,
+                                child: Text(
+                                  list[index].lastMessage,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                list[index].lastMessageTime,
+                              ),
+                            ],
                           ),
                         ),
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(list[index].contact.name),
-                            Container(
-                                child: (list[index].isDeal == true)
-                                    ? Icon(assignment_turned_in_rounded)
-                                    : Icon(dangerous))
-                          ],
-                        ),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(list[index].lastMessage),
-                            Text(
-                              list[index].lastMessageTime,
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text("")),
-          BottomNavigationBarItem(
-              icon: Icon(airplane_ticket_outlined), title: Text("")),
-        ],
+          ],
+        ),
       ),
     );
   }
