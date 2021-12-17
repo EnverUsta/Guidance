@@ -13,6 +13,19 @@ import 'package:guidance/src/utils/services/guide_info_service.dart';
 import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
+String name = "";
+String surname = "";
+String intro = "";
+String hobbies = "";
+
+Future<GuideInfo> getUser() async {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  GuideInfoService giService = GuideInfoService();
+  GuideInfo gInfo =
+      await giService.getGuideInfo(_auth.currentUser!.uid.toString());
+  return gInfo;
+}
+
 class GuideProfileForGuide extends StatefulWidget {
   const GuideProfileForGuide({Key? key}) : super(key: key);
 
@@ -25,14 +38,7 @@ class GuideProfileForGuide extends StatefulWidget {
 class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   var editToggle = false;
 
-  List<String> list = [
-    "Swim",
-    "Dance",
-    "Books",
-    "test",
-    "aaaa",
-    "bbbb",
-  ];
+  List<String> list = [];
 
   Future<GuideInfo> guideInfo = getUser();
 
@@ -155,15 +161,9 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildIntroduction() {
-    String introduction = "";
-
     guideInfo.then((GuideInfo value) {
-      //print(value.introducion.toString());
-      setState(() {
-        introduction = value.introducion.toString();
-      });
+      intro = value.introducion.toString();
     });
-    print(introduction +"77777777777777777777777");
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -186,7 +186,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
             Padding(
               padding: EdgeInsets.only(top: 0.h),
               child: Text(
-                introduction, //introduction
+                intro, //introduction
                 style: GoogleFonts.lora(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.normal,
@@ -200,6 +200,21 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildHobbyItems() {
+    guideInfo.then((GuideInfo value) {
+      //print(value.introducion.toString());
+      hobbies = value.hobbies.toString();
+    });
+
+    bool itHas = false;
+    list.forEach((element) {
+      if (element == hobbies) {
+        itHas = true;
+      }
+    });
+    if (itHas == false) {
+      list.add(hobbies);
+    }
+
     return SizedBox(
       height: 4.5.h,
       child: ListView.builder(
@@ -329,12 +344,4 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
       ),
     );
   }
-}
-
-Future<GuideInfo> getUser() async {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  GuideInfoService giService = GuideInfoService();
-  GuideInfo gInfo =
-      await giService.getGuideInfo(_auth.currentUser!.uid.toString());
-  return gInfo;
 }
