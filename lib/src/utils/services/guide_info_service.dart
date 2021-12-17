@@ -55,17 +55,16 @@ class GuideInfoService {
   Future<void> updateGuideInfo(
       String userId, String newintro, List<String> newhobbies) async {
     try {
-      GuideInfo guideInfo = await getGuideInfo(userId);
-      deleteGuideInfo(userId);
-      if (newintro.isNotEmpty) {
-        guideInfo.introducion = newintro;
-      }
-      if (newhobbies.isNotEmpty) {
-        guideInfo.hobbies = newhobbies;
-      }
-      createGuideInfo(userId, guideInfo.introducion, guideInfo.hobbies);
+      FirebaseFirestore.instance
+          .collection('guideInfos')
+          .doc(_auth.currentUser!.uid)
+          .update({'introducion': newintro, 'hobbies': newhobbies});
     } catch (e) {
       print('Error in createGuideInfo');
     }
   }
+
+
+
+  
 }

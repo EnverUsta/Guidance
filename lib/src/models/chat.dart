@@ -1,16 +1,16 @@
 class Chat {
-  final String id;
-  final String tripId;
-  final String userId;
-  final String message;
-  final String ctime;
-
+  String? id;
+  String tripId;
+  String userId;
+  String message;
+  String ctime;
+  
   Chat({
-    required this.id,
     required this.tripId,
     required this.userId,
     required this.message,
     required this.ctime,
+    this.id,
   });
 
   Chat.fromJson(Map<String, dynamic> json)

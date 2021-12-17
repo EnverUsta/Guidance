@@ -2,8 +2,16 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:guidance/src/utils/services/chat_service.dart';
 import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
+
+
+addMessage(String tripId, String message) async {
+  ChatService cs = ChatService();
+  await cs.createChat(tripId, message);
+}
+
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -63,7 +71,10 @@ class _ChatPageState extends State<ChatPage> {
   String otherUser = "other user";
 
   sendMessage() {
-    Map<String, dynamic> messageMap = {
+    addMessage("", messageController.text);
+    
+    
+    /*Map<String, dynamic> messageMap = {
       "message": messageController.text,
       "sendByMe": true
     };
@@ -71,7 +82,8 @@ class _ChatPageState extends State<ChatPage> {
     setState(() {
       chats.add(messageMap);
     });
-
+    */
+    
     scrollDown();
   }
 

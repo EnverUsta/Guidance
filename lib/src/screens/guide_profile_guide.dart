@@ -18,9 +18,9 @@ import 'package:sizer/sizer.dart';
 String name = "";
 String surname = "";
 String intro = "";
-List<String> list = []; // hobbies
-String newIntro = "";
-List<String> newHobbie = [];
+List<String> hobbies = []; // hobbies
+//String newIntro = "";
+//List<String> newHobbie = [];
 
 Future<GuideInfo> getGuideInfo() async {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -101,8 +101,10 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
 
   Widget _buildProfileImageRow() {
     user.then((UserModel value) {
-      name = value.name.toString();
-      surname = value.surname.toString();
+      setState(() {
+        name = value.name.toString();
+        surname = value.surname.toString();
+      });
     });
     return Container(
       margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h),
@@ -171,6 +173,10 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
             child: Center(
                 child: IconButton(
               onPressed: () => setState(() {
+                if (editToggle) {
+                  updateGuideInfo(intro, hobbies);
+                  print(hobbies);
+                }
                 editToggle = !editToggle;
               }),
               icon: const Icon(Icons.drive_file_rename_outline_outlined),
@@ -184,8 +190,11 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
 
   Widget _buildIntroduction() {
     guideInfo.then((GuideInfo value) {
-      intro = value.introducion.toString();
-      print(value.introducion.toString());
+      setState(() {
+        intro = value.introducion.toString();
+      });
+
+      //print(value.introducion.toString());
     });
     return Card(
       elevation: 5,
@@ -226,7 +235,9 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
     guideInfo.then((GuideInfo value) {
       //print(value.introducion.toString());
       var hobbiesFromJson = value.hobbies;
-      list = List<String>.from(hobbiesFromJson);
+      setState(() {
+        hobbies = List<String>.from(hobbiesFromJson);
+      });
     });
 
     return SizedBox(
@@ -234,20 +245,20 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          key: Key(list.length.toString()),
-          itemCount: list.length,
+          key: Key(hobbies.length.toString()),
+          itemCount: hobbies.length,
           itemBuilder: (context, index) {
             return InkWell(
               child: Align(
                 alignment: Alignment.center,
-                child: itemCard(list, index),
+                child: itemCard(index),
               ),
             );
           }),
     );
   }
 
-  Widget itemCard(List<String> list, int index) {
+  Widget itemCard(int index) {
     if (editToggle) {
       return Card(
         margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 1.w),
@@ -265,7 +276,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
                   margin: EdgeInsets.only(left: 1.8.w, right: 1.w),
                   width: 15.w,
                   child: TextFormField(
-                    initialValue: list[index],
+                    initialValue: hobbies[index],
                     onFieldSubmitted: (value) => {},
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 5.w),
@@ -277,9 +288,14 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => setState(() {
-                    list.removeAt(index);
-                  }),
+                  onPressed: () {
+                    setState(() {
+                      hobbies.removeAt(index);
+                      updateGuideInfo(intro, hobbies);
+                      guideInfo = getGuideInfo();
+                     
+                    });
+                  },
                   constraints: const BoxConstraints(maxWidth: 20),
                   icon: const Icon(Icons.highlight_off, color: Colors.white),
                   padding: const EdgeInsets.symmetric(vertical: 1.0),
@@ -301,7 +317,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
             child: Padding(
               padding: EdgeInsets.only(left: 1.0.w, right: 1.0.w),
               child: Text(
-                list[index],
+                hobbies[index],
                 style: GoogleFonts.nunito(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
@@ -346,7 +362,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
           primary: AppColors.budGreen,
         ),
         onPressed: () => setState(() {
-          TextFieldAlertDialog(list: list);
+          TextFieldAlertDialog(list: hobbies);
         }),
         child: Text(
           "Add",

@@ -7,11 +7,10 @@ final CollectionReference _mainCollection = _firestore.collection('chats');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class ChatService {
-  Future<void> createChat(Chat chat) async {
+  Future<void> createChat(String tripId, String message) async {
     try {
-      DocumentReference documentReferencer = _mainCollection.doc(chat.id);
-      Map<String, dynamic> data = chat.toJson();
-      await documentReferencer.set(data);
+      Chat chat = Chat(tripId: "11111", userId: _auth.currentUser!.uid.toString(), message: message, ctime: DateTime.now().toString());
+      FirebaseFirestore.instance.collection("chats").add(chat.toJson());
     } catch (e) {
       print('Error in createChat');
     }

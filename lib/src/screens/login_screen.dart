@@ -95,13 +95,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (await result == true) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => GuideProfileForGuide(),
+                            builder: (context) => ChatPage(),
                           ),
                         );
                       }else{
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ChatPage(),
+                            builder: (context) => GuideProfileForGuide(),
                           ),
                         );
                       }
