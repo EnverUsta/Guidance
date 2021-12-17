@@ -1,32 +1,35 @@
-import 'user_model.dart';
 import 'trip.dart';
 
 class Chat {
   final String id;
-  final Trip trip;
-  final UserModel owner;
+  final String tripId;
+  final String userEmail;
+  final String userName;
   final String message;
   final String ctime;
 
   Chat({
     required this.id,
-    required this.trip,
-    required this.owner,
+    required this.tripId,
+    required this.userEmail,
+    required this.userName,
     required this.message,
     required this.ctime,
   });
 
   Chat.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        trip = json['trip'],
-        owner = json['owner'],
+        tripId = json['tripId'],
+        userEmail = json['userEmail'],
+        userName = json['userName'],
         message = json['message'],
         ctime = json['ctime'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'trip': trip,
-        'owner': owner,
+        'tripId': tripId,
+        'userEmail': userEmail,
+        'userName': userName,
         'message': message,
         'ctime': ctime,
       };
