@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/user_service.dart';

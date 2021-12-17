@@ -1,9 +1,7 @@
-import 'user_model.dart';
-
 class Trip {
   final String id;
-  final UserModel guide;
-  final UserModel tourist;
+  final String guideId;
+  final String touristId;
   final bool guideAcceptance;
   final bool touristAcceptance;
   //Datetime --sql lite doesn't support Date or like that type
@@ -15,8 +13,8 @@ class Trip {
 
   Trip({
     required this.id,
-    required this.guide,
-    required this.tourist,
+    required this.guideId,
+    required this.touristId,
     required this.guideAcceptance,
     required this.touristAcceptance,
     required this.goalCountry,
@@ -28,8 +26,8 @@ class Trip {
 
   Trip.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        guide = json['guide'],
-        tourist = json['tourist'],
+        guideId = json['guideId'],
+        touristId = json['touristId'],
         guideAcceptance = json['guideAcceptance'],
         touristAcceptance = json['touristAcceptance'],
         goalCountry = json['goalCountry'],
@@ -40,8 +38,8 @@ class Trip {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'guide': guide,
-        'tourist': tourist,
+        'guide': guideId,
+        'tourist': touristId,
         'guideAcceptance': guideAcceptance,
         'toursitAcceptance': touristAcceptance,
         'goalCountry': goalCountry,
