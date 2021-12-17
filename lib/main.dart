@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/screens/trip_plan.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';

@@ -12,7 +12,7 @@ class AuthService {
 
   //register with email and password
   Future registerWithEmailAndPassword(String email, String password,
-      String name, String surname, UserRole role) async {
+      String name, String surname, UserRole role, String country, String city) async {
     try {
       UserCredential authResponse = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -23,8 +23,8 @@ class AuthService {
         name: name,
         surname: surname,
         role: role.toString(),
-        country: '',
-        city: '',
+        country: country,
+        city: city,
       );
       await userService.createUser(userModel);
     } on FirebaseAuthException catch (e) {

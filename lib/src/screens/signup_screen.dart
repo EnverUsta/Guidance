@@ -20,6 +20,8 @@ class _SignupScreenState extends State<SignupScreen> {
   String surname = "";
   String email = "";
   String password = "";
+  String country = "";
+  String city = "";
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,50 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(
                   height: 3.h,
                 ),
+                Card(
+                  elevation: 4,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Country',
+                      ),
+                      onChanged: (value) {
+                        country = value;
+                      },
+                      validator: (value) {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Card(
+                  elevation: 4,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'City',
+                      ),
+                      onChanged: (value) {
+                        city = value;
+                      },
+                      validator: (value) {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
                 SizedBox(
                   width: 85.w,
                   height: 6.h,
@@ -129,7 +175,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () {
                       final auth = AuthService();
                       auth.registerWithEmailAndPassword(
-                          email, password, name, surname, widget.userRole);
+                          email, password, name, surname, widget.userRole, country, city);
                     },
                     child: const Text(
                       'Signup',
