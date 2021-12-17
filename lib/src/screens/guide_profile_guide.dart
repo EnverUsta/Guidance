@@ -4,9 +4,12 @@
 *
 */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
+import 'package:guidance/src/models/guide_info.dart';
+import 'package:guidance/src/utils/services/guide_info_service.dart';
 import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,6 +24,7 @@ class GuideProfileForGuide extends StatefulWidget {
 
 class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   var editToggle = false;
+
   List<String> list = [
     "Swim",
     "Dance",
@@ -29,6 +33,8 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
     "aaaa",
     "bbbb",
   ];
+
+  Future<GuideInfo> guideInfo = getUser();
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +155,15 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildIntroduction() {
+    String introduction = "";
+
+    guideInfo.then((GuideInfo value) {
+      //print(value.introducion.toString());
+      setState(() {
+        introduction = value.introducion.toString();
+      });
+    });
+    print(introduction +"77777777777777777777777");
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -171,7 +186,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
             Padding(
               padding: EdgeInsets.only(top: 0.h),
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                introduction, //introduction
                 style: GoogleFonts.lora(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.normal,
@@ -314,4 +329,12 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
       ),
     );
   }
+}
+
+Future<GuideInfo> getUser() async {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  GuideInfoService giService = GuideInfoService();
+  GuideInfo gInfo =
+      await giService.getGuideInfo(_auth.currentUser!.uid.toString());
+  return gInfo;
 }

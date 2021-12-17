@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guidance/src/models/user_model.dart';
+import 'package:guidance/src/utils/services/guide_info_service.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('users');
@@ -12,6 +13,11 @@ class UserService {
       DocumentReference documentReferencer = _mainCollection.doc(user.id);
       Map<String, dynamic> data = user.toJson();
       await documentReferencer.set(data);
+
+      if(user.role=="UserRole.guide"){
+        GuideInfoService gis = GuideInfoService();
+        gis.createGuideInfo(user.id);
+      }
     } catch (e) {
       print('Error in createUser');
     }

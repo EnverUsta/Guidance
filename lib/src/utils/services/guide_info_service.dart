@@ -7,8 +7,9 @@ final CollectionReference _mainCollection = _firestore.collection('guideInfos');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class GuideInfoService {
-  Future<void> createGuideInfo(GuideInfo guideInfo) async {
+  Future<void> createGuideInfo(String userId) async {
     try {
+      GuideInfo guideInfo = GuideInfo(userId: userId, introducion: "", hobbies: "");
       DocumentReference documentReferencer =
           _mainCollection.doc(guideInfo.userId);
       Map<String, dynamic> data = guideInfo.toJson();
