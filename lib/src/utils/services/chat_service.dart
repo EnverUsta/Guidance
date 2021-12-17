@@ -47,5 +47,8 @@ class ChatService {
 
   getChatsSnapshot(String tripId){
     return _firestore.collection('chats').where('tripId', isEqualTo: tripId).orderBy('ctime').snapshots();
+    
+
+
   }
 }

@@ -23,14 +23,11 @@ Future<List<Chat>> getMessages(String tripId) async {
 }
 
 List<Chat> tempChats = [];
-Stream<QuerySnapshot>? chatsSnapshot;
+
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
-  //final String? chatRoomId;
-
-  //ChatPage({this.chatRoomId});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -47,66 +44,28 @@ class _ChatPageState extends State<ChatPage> {
             duration: const Duration(milliseconds: 400),
             curve: Curves.fastOutSlowIn);
       }
-      
     });
   }
 
-  //late Stream chats;
-
-  /*List<Map<String, dynamic>> chats = [
-    {"message": "start", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "other user", "sendByMe": false},
-    {"message": "current user", "sendByMe": true},
-    {"message": "last", "sendByMe": false},
-  ];*/
+  
 
   TextEditingController messageController = TextEditingController();
 
-  //for test
-  String uid = "current user";
-  String otherUser = "other user";
+
 
   sendMessage() {
     addMessage("", messageController.text);
 
-    /*Map<String, dynamic> messageMap = {
-      "message": messageController.text,
-      "sendByMe": true
-    };
-
-    setState(() {
-      chats.add(messageMap);
-    });
-    */
-
     scrollDown();
   }
 
-/*
+
   Widget chatMessageList() {
     chats.then((value) {
       setState(() {
         tempChats = value.toList();
+        tempChats.sort((a, b) => a.ctime.compareTo(b.ctime));
+
       });
     });
 
@@ -123,56 +82,24 @@ class _ChatPageState extends State<ChatPage> {
           );
         });
   }
-*/
-  Widget chatMessageListStream() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: chatsSnapshot,
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  return MessageField(
-                    message: snapshot.data!.docs[index].get('message'),
-                    sendByMe: user.currentUser!.uid.toString() ==
-                        snapshot.data!.docs[index].get('userId'), //to do
-                  );
-                })
-            : Container();
-      },
-    );
-  }
+
+ 
 
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
   Color acceptButtonColor = Colors.green;
   Color declineButtonColor = Colors.red;
   late String message = "";
 
-  @override
-    void initState() {
-      ChatService().getChatsSnapshot("11111").then((val) {
-        // to do
-        setState(() {
-          chatsSnapshot = val;
-          print("******************");
-          print(chatsSnapshot!.toList());
-        });
-      });
-      super.initState();
-    }
+ 
 
-  //Future<List<Chat>> chats = getMessages("11111");
+  Future<List<Chat>> chats = getMessages("11111");
+  
   @override
   Widget build(BuildContext context) {
-    
+    Timer(Duration(seconds: 1), () => scrollDown()
+        //_scrollController.jumpTo(_scrollController.position.maxScrollExtent),
+        );
 
-    Timer(
-      Duration(seconds: 1),
-      () =>scrollDown()
-          //_scrollController.jumpTo(_scrollController.position.maxScrollExtent),
-    );
-
-    //var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       /*appBar: AppBar(
           title: Text("Plan Your Trip"),
@@ -321,7 +248,7 @@ class _ChatPageState extends State<ChatPage> {
       child: Container(
         width: double.infinity,
         //color: Colors.lightBlueAccent,
-        child: chatMessageListStream(),
+        child: chatMessageList(),
       ),
     );
   }
