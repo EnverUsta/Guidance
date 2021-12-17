@@ -23,6 +23,8 @@ class AuthService {
         name: name,
         surname: surname,
         role: role.toString(),
+        country: '',
+        city: '',
       );
       await userService.createUser(userModel);
     } on FirebaseAuthException catch (e) {
