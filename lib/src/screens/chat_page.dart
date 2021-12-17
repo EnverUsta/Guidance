@@ -1,17 +1,29 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:guidance/src/models/chat.dart';
 import 'package:guidance/src/utils/services/chat_service.dart';
 import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
-
 
 addMessage(String tripId, String message) async {
   ChatService cs = ChatService();
   await cs.createChat(tripId, message);
 }
 
+FirebaseAuth user = FirebaseAuth.instance;
+
+Future<List<Chat>> getMessages(String tripId) async {
+  ChatService cs = ChatService();
+  List<Chat> chats = await cs.getChats("11111");
+  return chats;
+}
+
+List<Chat> tempChats = [];
+Stream<QuerySnapshot>? chatsSnapshot;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -30,14 +42,18 @@ class _ChatPageState extends State<ChatPage> {
   void scrollDown() async {
     await Future.delayed(const Duration(milliseconds: 100));
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.fastOutSlowIn);
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.fastOutSlowIn);
+      }
+      
     });
   }
 
   //late Stream chats;
-  List<Map<String, dynamic>> chats = [
+
+  /*List<Map<String, dynamic>> chats = [
     {"message": "start", "sendByMe": true},
     {"message": "other user", "sendByMe": false},
     {"message": "current user", "sendByMe": true},
@@ -62,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
     {"message": "other user", "sendByMe": false},
     {"message": "current user", "sendByMe": true},
     {"message": "last", "sendByMe": false},
-  ];
+  ];*/
 
   TextEditingController messageController = TextEditingController();
 
@@ -72,8 +88,7 @@ class _ChatPageState extends State<ChatPage> {
 
   sendMessage() {
     addMessage("", messageController.text);
-    
-    
+
     /*Map<String, dynamic> messageMap = {
       "message": messageController.text,
       "sendByMe": true
@@ -83,20 +98,49 @@ class _ChatPageState extends State<ChatPage> {
       chats.add(messageMap);
     });
     */
-    
+
     scrollDown();
   }
 
+/*
   Widget chatMessageList() {
+    chats.then((value) {
+      setState(() {
+        tempChats = value.toList();
+      });
+    });
+
     return ListView.builder(
         controller: _scrollController,
-        itemCount: chats.length,
+        itemCount: tempChats.length,
         itemBuilder: (context, index) {
           return MessageField(
-            message: chats[index]["message"],
-            sendByMe: chats[index]["sendByMe"],
+            message: tempChats[index].message,
+            sendByMe:
+                tempChats[index].userId == user.currentUser!.uid.toString()
+                    ? true
+                    : false,
           );
         });
+  }
+*/
+  Widget chatMessageListStream() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: chatsSnapshot,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return MessageField(
+                    message: snapshot.data!.docs[index].get('message'),
+                    sendByMe: user.currentUser!.uid.toString() ==
+                        snapshot.data!.docs[index].get('userId'), //to do
+                  );
+                })
+            : Container();
+      },
+    );
   }
 
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
@@ -105,13 +149,29 @@ class _ChatPageState extends State<ChatPage> {
   late String message = "";
 
   @override
+    void initState() {
+      ChatService().getChatsSnapshot("11111").then((val) {
+        // to do
+        setState(() {
+          chatsSnapshot = val;
+          print("******************");
+          print(chatsSnapshot!.toList());
+        });
+      });
+      super.initState();
+    }
+
+  //Future<List<Chat>> chats = getMessages("11111");
+  @override
   Widget build(BuildContext context) {
+    
 
     Timer(
-    Duration(seconds: 1),
-    () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent),
-  );
-  
+      Duration(seconds: 1),
+      () =>scrollDown()
+          //_scrollController.jumpTo(_scrollController.position.maxScrollExtent),
+    );
+
     //var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       /*appBar: AppBar(
@@ -261,7 +321,7 @@ class _ChatPageState extends State<ChatPage> {
       child: Container(
         width: double.infinity,
         //color: Colors.lightBlueAccent,
-        child: chatMessageList(),
+        child: chatMessageListStream(),
       ),
     );
   }

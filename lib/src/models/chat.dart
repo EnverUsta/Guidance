@@ -1,5 +1,4 @@
 class Chat {
-  String? id;
   String tripId;
   String userId;
   String message;
@@ -10,18 +9,15 @@ class Chat {
     required this.userId,
     required this.message,
     required this.ctime,
-    this.id,
   });
 
   Chat.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        tripId = json['tripId'],
+      : tripId = json['tripId'],
         userId = json['userId'],
         message = json['message'],
         ctime = json['ctime'];
 
   Map<String, dynamic> toJson() => {
-        'id': id,
         'tripId': tripId,
         'userId': userId,
         'message': message,
