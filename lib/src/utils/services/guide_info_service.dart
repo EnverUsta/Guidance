@@ -53,15 +53,15 @@ class GuideInfoService {
   }
 
   Future<void> updateGuideInfo(
-      String userId, String intro, String hobbie) async {
+      String userId, String newintro, List<String> newhobbies) async {
     try {
       GuideInfo guideInfo = await getGuideInfo(userId);
       deleteGuideInfo(userId);
-      if (intro.isNotEmpty) {
-        guideInfo.introducion = intro;
+      if (newintro.isNotEmpty) {
+        guideInfo.introducion = newintro;
       }
-      if (hobbie.isNotEmpty) {
-        guideInfo.hobbies.add(hobbie);
+      if (newhobbies.isNotEmpty) {
+        guideInfo.hobbies = newhobbies;
       }
       createGuideInfo(userId, guideInfo.introducion, guideInfo.hobbies);
     } catch (e) {

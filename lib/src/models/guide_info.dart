@@ -12,7 +12,7 @@ class GuideInfo {
   GuideInfo.fromJson(Map<String, dynamic> json)
       : userId = json['userId'],
         introducion = json['introducion'],
-        hobbies = json['hobbies'];
+        hobbies = List<String>.from(json['hobbies']);
 
   Map<String, dynamic> toJson() => {
         'userId': userId,

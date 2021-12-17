@@ -18,7 +18,9 @@ import 'package:sizer/sizer.dart';
 String name = "";
 String surname = "";
 String intro = "";
-String hobbies = "";
+List<String> list = []; // hobbies
+String newIntro = "";
+List<String> newHobbie = [];
 
 Future<GuideInfo> getGuideInfo() async {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,11 +38,11 @@ Future<UserModel> getUser() async {
   return user;
 }
 
-updateGuideInfo(String newIntro, String hobbie) async {
+updateGuideInfo(String newIntro, List<String> newhobbies) async {
   FirebaseAuth _auth = FirebaseAuth.instance;
   GuideInfoService giService = GuideInfoService();
   await giService.updateGuideInfo(
-      _auth.currentUser!.uid.toString(), newIntro, hobbie);
+      _auth.currentUser!.uid.toString(), newIntro, newhobbies);
 }
 
 class GuideProfileForGuide extends StatefulWidget {
@@ -54,8 +56,6 @@ class GuideProfileForGuide extends StatefulWidget {
 
 class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   var editToggle = false;
-
-  List<String> list = [];
 
   Future<GuideInfo> guideInfo = getGuideInfo();
   Future<UserModel> user = getUser();
@@ -185,6 +185,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   Widget _buildIntroduction() {
     guideInfo.then((GuideInfo value) {
       intro = value.introducion.toString();
+      print(value.introducion.toString());
     });
     return Card(
       elevation: 5,
@@ -224,18 +225,9 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   Widget _buildHobbyItems() {
     guideInfo.then((GuideInfo value) {
       //print(value.introducion.toString());
-      hobbies = value.hobbies.toString();
+      var hobbiesFromJson = value.hobbies;
+      list = List<String>.from(hobbiesFromJson);
     });
-
-    bool itHas = false;
-    list.forEach((element) {
-      if (element == hobbies) {
-        itHas = true;
-      }
-    });
-    if (itHas == false) {
-      list.add(hobbies);
-    }
 
     return SizedBox(
       height: 4.5.h,
