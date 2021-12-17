@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
 import 'package:guidance/src/models/guide_info.dart';
+import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/guide_info_service.dart';
+import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
@@ -18,12 +20,20 @@ String surname = "";
 String intro = "";
 String hobbies = "";
 
-Future<GuideInfo> getUser() async {
+Future<GuideInfo> getGuideInfo() async {
   FirebaseAuth _auth = FirebaseAuth.instance;
   GuideInfoService giService = GuideInfoService();
   GuideInfo gInfo =
       await giService.getGuideInfo(_auth.currentUser!.uid.toString());
   return gInfo;
+}
+
+Future<UserModel> getUser() async {
+  UserService uService = UserService();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  UserModel user =
+      await uService.getUserById(_auth.currentUser!.uid.toString());
+  return user;
 }
 
 class GuideProfileForGuide extends StatefulWidget {
@@ -40,7 +50,8 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
 
   List<String> list = [];
 
-  Future<GuideInfo> guideInfo = getUser();
+  Future<GuideInfo> guideInfo = getGuideInfo();
+  Future<UserModel> user = getUser();
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +93,11 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
   }
 
   Widget _buildProfileImageRow() {
+    user.then((UserModel value) {
+      name = value.name.toString();
+      surname = value.surname.toString();
+    });
+    print(name + "kkkkk");
     return Container(
       margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h),
       width: double.infinity,
@@ -112,7 +128,7 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "Burak Ekinci",
+                  name + " " + surname,
                   style: GoogleFonts.nunito(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
