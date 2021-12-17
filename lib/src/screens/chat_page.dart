@@ -1,14 +1,93 @@
+import 'dart:async';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
+
+  //final String? chatRoomId;
+
+  //ChatPage({this.chatRoomId});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  ScrollController _scrollController = ScrollController();
+
+  void scrollDown() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastOutSlowIn);
+    });
+  }
+
+  //late Stream chats;
+  List<Map<String, dynamic>> chats = [
+    {"message": "start", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "other user", "sendByMe": false},
+    {"message": "current user", "sendByMe": true},
+    {"message": "last", "sendByMe": false},
+  ];
+
+  TextEditingController messageController = TextEditingController();
+
+  //for test
+  String uid = "current user";
+  String otherUser = "other user";
+
+  sendMessage() {
+    Map<String, dynamic> messageMap = {
+      "message": messageController.text,
+      "sendByMe": true
+    };
+
+    setState(() {
+      chats.add(messageMap);
+    });
+
+    scrollDown();
+  }
+
+  Widget chatMessageList() {
+    return ListView.builder(
+        controller: _scrollController,
+        itemCount: chats.length,
+        itemBuilder: (context, index) {
+          return MessageField(
+            message: chats[index]["message"],
+            sendByMe: chats[index]["sendByMe"],
+          );
+        });
+  }
+
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
   Color acceptButtonColor = Colors.green;
   Color declineButtonColor = Colors.red;
@@ -16,23 +95,32 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    Timer(
+    Duration(seconds: 1),
+    () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent),
+  );
+  
     //var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       /*appBar: AppBar(
           title: Text("Plan Your Trip"),
         ),*/
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.all(2.h),
-          child: Column(
-            children: [
-              upperBarBuilder(),
-              SizedBox(
-                height: 4.h,
-              ),
-              chatBodyBuilder(),
-              textBoxBuilder(),
-            ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Container(
+            margin: EdgeInsets.all(2.h),
+            child: Column(
+              children: [
+                upperBarBuilder(),
+                SizedBox(
+                  height: 4.h,
+                ),
+                chatBodyBuilder(),
+                textBoxBuilder(),
+              ],
+            ),
           ),
         ),
       ),
@@ -161,15 +249,13 @@ class _ChatPageState extends State<ChatPage> {
     return Expanded(
       child: Container(
         width: double.infinity,
-        color: Colors.lightBlueAccent,
-        child: Text(message),
+        //color: Colors.lightBlueAccent,
+        child: chatMessageList(),
       ),
     );
   }
 
   Widget textBoxBuilder() {
-    TextEditingController _messageController = TextEditingController();
-
     Widget textBox() {
       return Expanded(
         child: Container(
@@ -184,7 +270,7 @@ class _ChatPageState extends State<ChatPage> {
             textCapitalization: TextCapitalization.sentences,
             minLines: 1,
             maxLines: 5,
-            controller: _messageController,
+            controller: messageController,
             decoration: InputDecoration(
                 hintText: 'Write a message',
                 contentPadding: EdgeInsets.all(4.2.w),
@@ -201,12 +287,13 @@ class _ChatPageState extends State<ChatPage> {
         child: IconButton(
           onPressed: () {
             //print(messageController.text); =
-            _messageController.text = _messageController.text.trim();
-            if (_messageController.text.isNotEmpty) {
+            messageController.text = messageController.text.trim();
+            if (messageController.text.isNotEmpty) {
+              sendMessage();
               setState(() {
-                message = _messageController.text;
+                message = messageController.text;
               });
-              _messageController.clear();
+              messageController.clear();
             }
           },
           icon: const Icon(
