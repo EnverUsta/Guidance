@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/myChatModel.dart';
+import 'package:guidance/src/screens/chat_page.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatListPage extends StatefulWidget {
@@ -39,7 +40,13 @@ class _ChatListPageState extends State<ChatListPage> {
                       Card(
                         elevation: 0,
                         child: ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(),
+                          ),
+                        );
+                          },
                           leading: ConstrainedBox(
                             constraints: BoxConstraints(
                               maxHeight: 15.h,

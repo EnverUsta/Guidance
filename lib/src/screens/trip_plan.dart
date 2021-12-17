@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:guidance/src/screens/chat_list_page.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -197,6 +198,12 @@ class _TripPlanState extends State<TripPlan> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 4.h),
         ),
         onPressed: () {
+
+          Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatListPage(),
+                          ),
+                        );
           // if (planTripFormKey.currentState!.validate() &&
           //     tripDateTime != null) {
           //   planTripFormKey.currentState!.save();

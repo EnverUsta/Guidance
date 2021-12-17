@@ -35,7 +35,7 @@ class ChatModel {
             : (messageTime1 == convertedDateTime2)
                 ? "yesterday"
                 : messageTime1,
-        contact: ContactModel(name: "Ahmet Demir")),
+        contact: ContactModel(name: "Ahmet Huzeyfe Demir")),
     ChatModel(
         lastMessage: "Sorry can't make it",
         isDeal: false,

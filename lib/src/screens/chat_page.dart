@@ -54,7 +54,7 @@ class _ChatPageState extends State<ChatPage> {
     {"message": "current user", "sendByMe": true},
     {"message": "other user", "sendByMe": false},
     {"message": "current user", "sendByMe": true},
-    {"message": "last", "sendByMe": false},
+    {"message": "deal", "sendByMe": false},
   ];
 
   TextEditingController messageController = TextEditingController();
@@ -97,7 +97,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
 
     Timer(
-    Duration(seconds: 1),
+    Duration(milliseconds: 100),
     () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent),
   );
   
@@ -139,14 +139,13 @@ class _ChatPageState extends State<ChatPage> {
 
     Widget avatarImage() {
       return SizedBox(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Container(
-            color: Colors.blue,
-            child: Icon(Icons.image,
-                color: Colors.black, size: 10.h), //change with profile photo
-          ),
-        ),
+        child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight: 10.h,
+                            ),
+                            child: Image.asset("assets/images/Saly-11.png",
+                                fit: BoxFit.cover),
+                          ),
       );
     }
 
