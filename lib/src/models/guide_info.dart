@@ -1,7 +1,7 @@
 class GuideInfo {
   String userId;
   String introducion;
-  String hobbies;
+  List<String> hobbies;
 
   GuideInfo({
     required this.userId,

@@ -14,9 +14,10 @@ class UserService {
       Map<String, dynamic> data = user.toJson();
       await documentReferencer.set(data);
 
-      if(user.role=="UserRole.guide"){
+      if (user.role == "UserRole.guide") {
         GuideInfoService gis = GuideInfoService();
-        gis.createGuideInfo(user.id);
+        List<String> hobbies = [];
+        gis.createGuideInfo(user.id, '', hobbies);
       }
     } catch (e) {
       print('Error in createUser');
@@ -61,8 +62,11 @@ class UserService {
   }
 
   Future<List<UserModel>> getGuides(String city) async {
-    QuerySnapshot<Map<String, dynamic>> data =
-        await _firestore.collection('users').where('role', isEqualTo: 'UserRole.guide').where('city', isEqualTo: city).get();
+    QuerySnapshot<Map<String, dynamic>> data = await _firestore
+        .collection('users')
+        .where('role', isEqualTo: 'UserRole.guide')
+        .where('city', isEqualTo: city)
+        .get();
 
     List<UserModel> users = [];
     data.docs.forEach((element) {

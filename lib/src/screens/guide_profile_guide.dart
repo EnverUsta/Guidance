@@ -36,6 +36,13 @@ Future<UserModel> getUser() async {
   return user;
 }
 
+updateGuideInfo(String newIntro, String hobbie) async {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  GuideInfoService giService = GuideInfoService();
+  await giService.updateGuideInfo(
+      _auth.currentUser!.uid.toString(), newIntro, hobbie);
+}
+
 class GuideProfileForGuide extends StatefulWidget {
   const GuideProfileForGuide({Key? key}) : super(key: key);
 
@@ -97,7 +104,6 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
       name = value.name.toString();
       surname = value.surname.toString();
     });
-    print(name + "kkkkk");
     return Container(
       margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h),
       width: double.infinity,
