@@ -53,4 +53,15 @@ class UserService {
     });
     return users;
   }
+
+  Future<List<UserModel>> getGuides(String city) async {
+    QuerySnapshot<Map<String, dynamic>> data =
+        await _firestore.collection('users').where('role', isEqualTo: 'UserRole.guide').where('city', isEqualTo: city).get();
+
+    List<UserModel> users = [];
+    data.docs.forEach((element) {
+      users.add(UserModel.fromJson(element.data()));
+    });
+    return users;
+  }
 }

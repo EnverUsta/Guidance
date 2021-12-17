@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:guidance/src/screens/empty.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -197,19 +198,14 @@ class _TripPlanState extends State<TripPlan> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 4.h),
         ),
         onPressed: () {
-          // if (planTripFormKey.currentState!.validate() &&
-          //     tripDateTime != null) {
-          //   planTripFormKey.currentState!.save();
-
-          //   Trip tripPlan = Trip(country!, city!, language!, tripDateTime!);
-
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => Empty(tripPlan)));
-
-          //Navigator.pop(context);
-          // } else if (tripDateTime == null) {
-          //   showAlert(context, "Empty Field!", "Please select a date");
-          // }
+          if (planTripFormKey.currentState!.validate() &&
+              tripDateTime != null) {
+            planTripFormKey.currentState!.save();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Empty(country!, city!, tripTimeStr)));
+          } else if (tripDateTime == null) {
+            showAlert(context, "Empty Field!", "Please select a date");
+          }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

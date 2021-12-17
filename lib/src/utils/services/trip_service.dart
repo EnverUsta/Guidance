@@ -9,7 +9,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 class TripService {
   Future<void> createTrip(Trip trip) async {
     try {
-      DocumentReference documentReferencer = _mainCollection.doc(trip.id);
+      DocumentReference documentReferencer = _mainCollection.doc();
       Map<String, dynamic> data = trip.toJson();
       await documentReferencer.set(data);
     } catch (e) {

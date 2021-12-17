@@ -10,8 +10,14 @@ class AuthService {
   Stream<User?> get onAuthStateChanged => _auth.userChanges();
 
   //register with email and password
-  Future registerWithEmailAndPassword(String email, String password,
-      String name, String surname, UserRole role, String country, String city) async {
+  Future registerWithEmailAndPassword(
+      String email,
+      String password,
+      String name,
+      String surname,
+      UserRole role,
+      String country,
+      String city) async {
     try {
       UserCredential authResponse = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -43,13 +49,19 @@ class AuthService {
     try {
       UserCredential response = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-
+      
       UserModel um = await userService.getUserInfo(email);
-      print(um.id);
-      print(um.email);
-      print(um.name);
-      print(um.role);
 
+      /*
+      List<UserModel> users = await userService.getGuides("istanbul");
+      users.forEach((user) {
+        print(user.id);
+        print(user.email);
+        print(user.name);
+        print(user.role);
+      });
+      */
+      
       return um.role == role.toString() ? true : false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

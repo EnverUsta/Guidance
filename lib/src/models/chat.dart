@@ -1,18 +1,14 @@
-import 'trip.dart';
-
 class Chat {
   final String id;
   final String tripId;
-  final String userEmail;
-  final String userName;
+  final String userId;
   final String message;
   final String ctime;
 
   Chat({
     required this.id,
     required this.tripId,
-    required this.userEmail,
-    required this.userName,
+    required this.userId,
     required this.message,
     required this.ctime,
   });
@@ -20,16 +16,14 @@ class Chat {
   Chat.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         tripId = json['tripId'],
-        userEmail = json['userEmail'],
-        userName = json['userName'],
+        userId = json['userId'],
         message = json['message'],
         ctime = json['ctime'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'tripId': tripId,
-        'userEmail': userEmail,
-        'userName': userName,
+        'userId': userId,
         'message': message,
         'ctime': ctime,
       };
