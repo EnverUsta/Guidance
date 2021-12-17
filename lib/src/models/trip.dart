@@ -1,5 +1,3 @@
-import 'country.dart';
-import 'city.dart';
 import 'user_model.dart';
 
 class Trip {
@@ -10,8 +8,8 @@ class Trip {
   final bool touristAcceptance;
   //Datetime --sql lite doesn't support Date or like that type
   final String goalDate;
-  final Country goalCountry;
-  final City goalCity;
+  final String goalCountry;
+  final String goalCity;
   final String ctime;
   final String utime;
 

@@ -37,7 +37,8 @@ class AuthService {
   }
 
   //Sign in with email and password
-  Future<bool?> signInWithEmailAndPassword(String email, String password, UserRole role) async {
+  Future<bool?> signInWithEmailAndPassword(
+      String email, String password, UserRole role) async {
     try {
       UserCredential response = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -47,9 +48,8 @@ class AuthService {
       print(um.email);
       print(um.name);
       print(um.role);
-      
-      return um.role==role.toString() ?  true : false;
- 
+
+      return um.role == role.toString() ? true : false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

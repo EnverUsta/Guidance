@@ -1,11 +1,8 @@
-import 'city.dart';
-import 'country.dart';
-
 class Address {
   final String id;
   final String userId;
-  final Country country;
-  final City city;
+  final String country;
+  final String city;
 
   Address({
     required this.id,

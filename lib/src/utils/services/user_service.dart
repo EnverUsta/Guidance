@@ -26,7 +26,31 @@ class UserService {
     return UserModel.fromJson(data.docs.single.data());
 
     // commt by mehmet yazıcı ;)
+  }
 
-    
+  Future<String> getUserId() async {
+    return _auth.currentUser!.uid.toString();
+  }
+
+  Future<UserModel> getUserById(String id) async {
+    var collection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await collection.doc(id).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      return UserModel.fromJson(data!);
+    } else {
+      throw ("Not found user by this ID!");
+    }
+  }
+
+  Future<List<UserModel>> getUsers() async {
+    QuerySnapshot<Map<String, dynamic>> data =
+        await _firestore.collection('users').get();
+
+    List<UserModel> users = [];
+    data.docs.forEach((element) {
+      users.add(UserModel.fromJson(element.data()));
+    });
+    return users;
   }
 }

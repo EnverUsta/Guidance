@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'enum/user_role.dart';
+import 'package:guidance/src/models/address.dart';
 
 class UserModel {
   String id;
@@ -8,6 +6,7 @@ class UserModel {
   String surname;
   String email;
   String role;
+  //Address address;
 
   UserModel({
     required this.id,
@@ -15,6 +14,7 @@ class UserModel {
     required this.surname,
     required this.email,
     required this.role,
+    // required this.address,
   });
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -23,6 +23,7 @@ class UserModel {
         surname = json['surname'],
         email = json['email'],
         role = json['role'];
+  //address = json['address'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -30,5 +31,6 @@ class UserModel {
         'surname': surname,
         'email': email,
         'role': role,
+        //'address': address,
       };
 }
