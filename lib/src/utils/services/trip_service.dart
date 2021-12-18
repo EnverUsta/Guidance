@@ -92,7 +92,7 @@ class TripService {
 
   Future<bool?> getTripStatusByTripId(String id) async {
     UserModel userModel = await userService.getUserById(_auth.currentUser!.uid);
-    if (userModel.role == "UserModel.guide") {
+    if (userModel.role == "UserRole.guide") {
       var collection = FirebaseFirestore.instance.collection('trips');
       var docSnapshot = await collection.doc(id).get();
       Map<String, dynamic>? dS = docSnapshot.data();
