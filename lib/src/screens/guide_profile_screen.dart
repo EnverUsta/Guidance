@@ -40,8 +40,8 @@ Future<UserModel> getUser() async {
 
 updateGuideInfo(String newIntro, List<String> newhobbies) async {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  GuideInfoService giService = GuideInfoService();
-  await giService.updateGuideInfo(
+  GuideInfoService guideService = GuideInfoService();
+  await guideService.updateGuideInfo(
       _auth.currentUser!.uid.toString(), newIntro, newhobbies);
 }
 
@@ -73,7 +73,7 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
             SizedBox(
               height: 2.5.h,
             ),
-            _buildIntroduction(),
+            // _buildIntroduction(),
             _buildHobbiesText(),
             _buildHobbyItems(),
             Visibility(visible: editToggle, child: _buildAddButton()),
@@ -187,8 +187,8 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
     );
   }
 
-  Widget _buildIntroduction() {
-    guideInfo.then((GuideInfo value) {
+  Future<Widget> _buildIntroduction() async {
+    await guideInfo.then((GuideInfo value) {
       setState(() {
         intro = value.introducion.toString();
       });
