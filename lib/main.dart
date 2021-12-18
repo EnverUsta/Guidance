@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/screens/chat_list_screen.dart';
+import 'package:guidance/src/screens/guide_select_screen.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/screens/trip_plan_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
                         if (snapUserModel.hasData) {
                           return snapUserModel.data!.role == 'UserRole.tourist'
                               ? const TripPlanScreen()
-                              : const ChatListScreen();
+                              : const GuideSelectScreen();
                         } else {
                           return const Scaffold(
                             body: Center(
