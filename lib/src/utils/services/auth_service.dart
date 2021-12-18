@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
@@ -11,45 +10,55 @@ class AuthService {
   Stream<User?> get onAuthStateChanged => _auth.userChanges();
 
   //register with email and password
-  Future registerWithEmailAndPassword(String email, String password,
-      String name, String surname, UserRole role) async {
+  Future registerWithEmailAndPassword(
+      String email,
+      String password,
+      String name,
+      String surname,
+      UserRole role,
+      String country,
+      String city) async {
     try {
       UserCredential authResponse = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      print(authResponse.user!.uid);
       final userModel = UserModel(
         id: authResponse.user!.uid,
         email: email,
         name: name,
         surname: surname,
         role: role.toString(),
+        country: country,
+        city: city,
       );
       await userService.createUser(userModel);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+      } else if (e.code == 'email-already-in-use') {}
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
   //Sign in with email and password
-  Future<bool?> signInWithEmailAndPassword(String email, String password, UserRole role) async {
+  Future<bool?> signInWithEmailAndPassword(
+      String email, String password, UserRole role) async {
     try {
       UserCredential response = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
       UserModel um = await userService.getUserInfo(email);
-      print(um.id);
-      print(um.email);
-      print(um.name);
-      print(um.role);
-      
-      return um.role==role.toString() ?  true : false;
- 
+
+      /*
+      List<UserModel> users = await userService.getGuides("istanbul");
+      users.forEach((user) {
+        print(user.id);
+        print(user.email);
+        print(user.name);
+        print(user.role);
+      });
+      */
+
+      return um.role == role.toString() ? true : false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
