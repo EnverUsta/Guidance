@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/myChatModel.dart';
+import 'package:guidance/src/models/trip.dart';
+import 'package:guidance/src/models/user_model.dart';
+import 'package:guidance/src/screens/chat_screen.dart';
 import 'package:guidance/src/utils/services/trip_service.dart';
+import 'package:guidance/src/utils/services/user_service.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -14,9 +19,25 @@ class _ChatListScreenState extends State<ChatListScreen> {
   List<ChatModel> chatList = ChatModel.list;
   final tripService = TripService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final UserService userService = UserService();
+  String userRole = ""; // UserRole.guide or UserRole.tourist
+  String otherUserName = ''; // guideNameor touristName
+  String otherUserIdField = "";
   @override
   Widget build(BuildContext context) {
+    userService.getUserRole().then((value) {
+      setState(() {
+        userRole = value.toString();
+      });
+      if (userRole == "UserRole.guide") {
+        otherUserName = 'touristName';
+        otherUserIdField = 'touristId';
+      } else {
+        otherUserName = 'guideName';
+        otherUserIdField = 'guideId';
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -37,8 +58,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
             ),
             Expanded(
               child: StreamBuilder<Object>(
-                  stream: tripService.getTrips(
-                      _auth.currentUser!.uid, 'UserRole.tourist'),
+                  stream:
+                      tripService.getTrips(_auth.currentUser!.uid, userRole),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return const Center(
@@ -47,7 +68,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     }
 
                     final tripDocs = snapshot.data.docs as List;
-                    // chatDocs.sort((a, b) => a['ctime'].compareTo(b['ctime']));
+
+                    tripDocs.sort((a, b) =>
+                        a['lastMessageTime'].compareTo(b['lastMessageTime']));
                     return ListView.builder(
                       itemCount: tripDocs.length,
                       itemBuilder: (context, index) {
@@ -57,6 +80,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               elevation: 0,
                               child: ListTile(
                                 onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                          tripId: tripDocs[index]['id'],
+                                          otherUserId: tripDocs[index]
+                                              [otherUserIdField]),
+                                    ),
+                                  );
                                   //tripDocs[index]['id']  gönderilicek
                                 },
                                 leading: ConstrainedBox(
@@ -74,7 +105,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     SizedBox(
                                       width: 55.w,
                                       child: Text(
-                                        tripDocs[index]['id'],
+                                        tripDocs[index][otherUserName],
                                         // chatList[index].contact.name,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
@@ -83,26 +114,56 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                       ),
                                     ),
                                     Container(
-                                        height: 4.h,
-                                        width: 4.h,
-                                        margin: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            color:
-                                                chatList[index].isDeal == true
-                                                    ? Colors.green
-                                                    : Colors.red,
-                                            shape: BoxShape.circle),
-                                        child: (chatList[index].isDeal == true)
-                                            ? Icon(
-                                                Icons.check,
-                                                color: Colors.white,
-                                                size: 3.5.h,
-                                              )
-                                            : Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                                size: 3.5.h,
-                                              ))
+                                      height: 4.h,
+                                      width: 4.h,
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          color: tripDocs[index]
+                                                      ['guideAcceptance'] ==
+                                                  null
+                                              ? Colors.red
+                                              : tripDocs[index][
+                                                          'touristAcceptance'] ==
+                                                      null
+                                                  ? Colors.red
+                                                  : tripDocs[index][
+                                                              'guideAcceptance'] &&
+                                                          tripDocs[index][
+                                                              'touristAcceptance']
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                          shape: BoxShape.circle),
+                                      child: tripDocs[index]
+                                                  ['guideAcceptance'] ==
+                                              null
+                                          ? Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 3.5.h,
+                                            )
+                                          : tripDocs[index]
+                                                      ['touristAcceptance'] ==
+                                                  null
+                                              ? Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                  size: 3.5.h,
+                                                )
+                                              : tripDocs[index]
+                                                          ['guideAcceptance'] &&
+                                                      tripDocs[index]
+                                                          ['touristAcceptance']
+                                                  ? Icon(
+                                                      Icons.check,
+                                                      color: Colors.white,
+                                                      size: 3.5.h,
+                                                    )
+                                                  : Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                      size: 3.5.h,
+                                                    ),
+                                    )
                                   ],
                                 ),
                                 subtitle: Row(
@@ -112,13 +173,40 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     SizedBox(
                                       width: 45.w,
                                       child: Text(
-                                        chatList[index].lastMessage,
+                                        tripDocs[index]['lastMessage'],
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Text(
-                                      chatList[index].lastMessageTime,
+                                    SizedBox(
+                                      width: 20.w,
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text(
+                                          DateTime.fromMicrosecondsSinceEpoch(
+                                                          tripDocs[index]['lastMessageTime']
+                                                              .microsecondsSinceEpoch)
+                                                      .day ==
+                                                  DateTime.now().day
+                                              ? DateTime.fromMicrosecondsSinceEpoch(
+                                                          tripDocs[index]['lastMessageTime']
+                                                              .microsecondsSinceEpoch)
+                                                      .hour
+                                                      .toString() +
+                                                  ":" +
+                                                  DateTime.fromMicrosecondsSinceEpoch(
+                                                          tripDocs[index]['lastMessageTime']
+                                                              .microsecondsSinceEpoch)
+                                                      .minute
+                                                      .toString()
+                                              : DateTime.fromMicrosecondsSinceEpoch(
+                                                      tripDocs[index]['lastMessageTime'].microsecondsSinceEpoch)
+                                                  .toString(),
+
+                                          maxLines: 1,
+                                          //overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

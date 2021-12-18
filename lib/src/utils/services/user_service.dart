@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guidance/src/models/trip.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/guide_info_service.dart';
 
@@ -39,7 +40,7 @@ class UserService {
     return _auth.currentUser!.uid.toString();
   }
 
-  Future<UserModel> getUserById(String id) async {
+  Future<UserModel> getUserById(String? id) async {
     var collection = FirebaseFirestore.instance.collection('users');
     var docSnapshot = await collection.doc(id).get();
     if (docSnapshot.exists) {
@@ -74,4 +75,20 @@ class UserService {
     });
     return users;
   }
+
+  Future<String> getUserRole() async {
+    var collection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await collection.doc(_auth.currentUser!.uid).get();
+    try {
+      Map<String, dynamic>? data = docSnapshot.data();
+
+      // You can then retrieve the value from the Map like this:
+      var value = data?['role'];
+      return value;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+ 
 }

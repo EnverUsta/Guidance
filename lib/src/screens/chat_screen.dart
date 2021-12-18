@@ -10,20 +10,21 @@ import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final String otherUserId;
+  final String tripId;
+
+  const ChatScreen({Key? key, required this.tripId, required this.otherUserId}) : super(key: key);
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  String tripId = "bVqvYXzQGXZJpDMFSFWp"; //to do
-  String otherUserId = "vZ7ogWGtQwPgtPI7GY6rMoab1FD2"; // to do
   String firstName = "";
   String lastName = "";
   final ScrollController _scrollController = ScrollController();
-  ChatService chatService = ChatService();
-  UserService userService = UserService();
-  TripService tripService = TripService();
+  final ChatService chatService = ChatService();
+  final UserService userService = UserService();
+  final TripService tripService = TripService();
 
   void scrollDown() async {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -36,14 +37,12 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  sendMessage() async {
+  sendMessage(String tripId) async {
     await chatService.createChat(tripId, messageController.text);
     scrollDown();
   }
 
-  addMessage(String tripId, String message) async {
-    await chatService.createChat(tripId, message);
-  }
+ 
 
   TextEditingController messageController = TextEditingController();
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
@@ -102,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     Widget userName() {
-      Future<UserModel> userModel = userService.getUserById(otherUserId);
+      Future<UserModel> userModel = userService.getUserById(widget.otherUserId);
       userModel.then((value) {
         setState(() {
           firstName = value.name.toString();
@@ -125,7 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
         dealStatus = 1;
         setState(() {
           declineButtonColor = Colors.grey;
-          tripService.updateTripDealStatus(tripId, user.currentUser!.uid, true);
+          tripService.updateTripDealStatus(widget.tripId, user.currentUser!.uid, true);
         });
       }
     }
@@ -135,13 +134,13 @@ class _ChatScreenState extends State<ChatScreen> {
         dealStatus = -1;
         setState(() {
           acceptButtonColor = Colors.grey;
-          tripService.updateTripDealStatus(tripId, user.currentUser!.uid, false);
+          tripService.updateTripDealStatus(widget.tripId, user.currentUser!.uid, false);
         });
       }
     }
 
     Widget dealStatusButtons() {
-      tripService.getTripStatusByTripId(tripId).then((value) {
+      tripService.getTripStatusByTripId(widget.tripId).then((value) {
         setState(() {
           if (value == null) {
             dealStatus = 0;
@@ -228,7 +227,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: SizedBox(
         width: double.infinity,
         child: StreamBuilder(
-          stream: chatService.chatStream(tripId),
+          stream: chatService.chatStream(widget.tripId),
           builder: (BuildContext ctx, AsyncSnapshot chatSnapshot) {
             //just add this line
             if (chatSnapshot.data == null) {
@@ -303,7 +302,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         //print(messageController.text); =
                         messageController.text = messageController.text.trim();
                         if (messageController.text.isNotEmpty) {
-                          sendMessage();
+                          sendMessage(widget.tripId);
                           setState(() {
                             message = messageController.text;
                           });

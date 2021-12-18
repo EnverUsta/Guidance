@@ -13,12 +13,22 @@ final UserService userService = UserService();
 class TripService {
   Future<void> createTrip(String guideId, DateTime goalDate, String goalCountry,
       String goalCity) async {
+    late String guideName;
+    late String touristName;
+    await userService.getUserById(guideId).then((value) {
+      guideName = value.name + " " + value.surname;
+    });
+    await userService.getUserById(_auth.currentUser!.uid).then((value) {
+      touristName = value.name + " " + value.surname;
+    });
     Trip trip = Trip(
       guideId: guideId,
       goalCountry: goalCountry,
       goalCity: goalCity,
       goalDate: goalDate,
       touristId: _auth.currentUser!.uid.toString(),
+      guideName: guideName,
+      touristName: touristName,
     );
     try {
       final result = await FirebaseFirestore.instance
