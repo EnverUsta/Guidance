@@ -4,7 +4,6 @@ import 'package:guidance/src/models/chat.dart';
 import 'package:guidance/src/utils/services/trip_service.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-final CollectionReference _mainCollection = _firestore.collection('chats');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final TripService tripService = TripService();
 

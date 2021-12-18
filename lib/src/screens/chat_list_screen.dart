@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:guidance/src/models/myChatModel.dart';
 import 'package:guidance/src/screens/chat_screen.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
@@ -15,7 +14,6 @@ class ChatListScreen extends StatefulWidget {
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
-  List<ChatModel> chatList = ChatModel.list;
   final tripService = TripService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserService userService = UserService();
