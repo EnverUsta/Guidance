@@ -48,14 +48,14 @@ class _NavbarTouristState extends State<NavbarTourist> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
-                CustomIcons.comment,
+                CustomIcons.paperPlane,
                 size: 30,
               ),
               label: "",
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                CustomIcons.paperPlane,
+                CustomIcons.comment,
                 size: 30,
               ),
               label: "",

@@ -25,42 +25,37 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        /*appBar: AppBar(
-          title: Text("Plan Your Trip"),
-        ),*/
         body: Container(
       margin: EdgeInsets.symmetric(horizontal: 4.h),
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Form(
         key: planTripFormKey,
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 7.h),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Plan Your Trip",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 4.h,
-                    ),
+        child: ListView(
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 7.h),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Plan Your Trip",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 4.h,
                   ),
                 ),
               ),
-              //const SizedBox(height: 10),
-              buildCountryField(),
-              SizedBox(height: 5.h),
-              buildCityField(),
-              SizedBox(height: 5.h),
-              buildLanguageField(),
-              SizedBox(height: 5.h),
-              buildSelectDateField(),
-              SizedBox(height: 5.h),
-              buildSubmitButton(),
-            ],
-          ),
+            ),
+            //const SizedBox(height: 10),
+            buildCountryField(),
+            SizedBox(height: 5.h),
+            buildCityField(),
+            SizedBox(height: 5.h),
+            buildLanguageField(),
+            SizedBox(height: 5.h),
+            buildSelectDateField(),
+            SizedBox(height: 5.h),
+            buildSubmitButton(),
+          ],
         ),
       ),
     ));

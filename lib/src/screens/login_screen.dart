@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/screens/chat_list_screen.dart';
 import 'package:guidance/src/screens/guide_profile_screen.dart';
+import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
@@ -19,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
   final authService = AuthService();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,31 +87,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 6.h,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Future<bool?> result =
-                          authService.signInWithEmailAndPassword(
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final result =
+                          await authService.signInWithEmailAndPassword(
                               email, password, widget.userRole);
-
-                      if (await result == true) {
-                        Navigator.of(context).push(
+                      if (result != null && result) {
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const ChatListScreen(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const GuideProfileScreen(),
+                            builder: (context) => const HomeScreen(),
                           ),
                         );
                       }
+                      setState(() {
+                        isLoading = false;
+                      });
                     },
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                           const Color(0xFF7AAC5D),

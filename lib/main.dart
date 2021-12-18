@@ -6,6 +6,7 @@ import 'package:guidance/src/models/chat.dart';
 import 'package:flutter/services.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/screens/chat_list_screen.dart';
+import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/screens/trip_plan_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
@@ -21,7 +22,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,23 +46,7 @@ class MyApp extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.active) {
                   final bool isSignedIn = snapshot.hasData;
                   if (isSignedIn) {
-                    return FutureBuilder(
-                      future: userService.getUserById(snapshot.data!.uid),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<UserModel> snapUserModel) {
-                        if (snapUserModel.hasData) {
-                          return snapUserModel.data!.role == 'UserRole.tourist'
-                              ? const TripPlanScreen()
-                              : const ChatListScreen();
-                        } else {
-                          return const Scaffold(
-                            body: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      },
-                    );
+                    return const HomeScreen();
                   } else {
                     return const RoleSelectorScreen();
                   }
