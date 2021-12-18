@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:guidance/src/constants/app_colors.dart';
 import 'package:guidance/src/models/guide_list_item.dart';
@@ -28,13 +30,16 @@ class _GuideSelectScreenState extends State<GuideSelectScreen> {
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
       appBar: AppBar(
-        title: const Text('Select Your Guide'),
+        title: Text(
+          'Select Your Guide',
+          style: TextStyle(fontSize: 21.sp),
+        ),
         backgroundColor: AppColors.mainBackgroundColor,
         foregroundColor: AppColors.raisinBlack,
         elevation: 0,
       ),
       body: Container(
-          margin: EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 4.0.w),
+          margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.0.w),
           child: _buildGuideList(_guideInfoList)),
     );
   }
@@ -53,11 +58,23 @@ Widget _buildGuideListCard(GuideListItem guideItem) {
     onTap: () {
       debugPrint('Card tapped.');
     },
-    child: Card(
-      child: ListTile(
-        leading: Image.asset('assets/images/Saly-11.png'),
-        title: Text(guideItem.name),
-        subtitle: Text(guideItem.shortInfo),
+    child: Container(
+      height: 20.h,
+      width: 80.w,
+      margin: EdgeInsets.symmetric(vertical: 0.1.h),
+      child: Card(
+        color: AppColors.lighterBackgroundColor,
+        child: ListTile(
+          leading: Container(
+            height: 18.h,
+            child: Image.asset(
+              'assets/images/Saly-portrait.png',
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+          title: Text(guideItem.name),
+          subtitle: Text(guideItem.shortInfo),
+        ),
       ),
     ),
   );
