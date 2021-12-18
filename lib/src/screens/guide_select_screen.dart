@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/constants/app_colors.dart';
+import 'package:guidance/src/models/guide_list_item.dart';
 import 'package:sizer/sizer.dart';
 
 class GuideSelectScreen extends StatefulWidget {
@@ -10,6 +11,18 @@ class GuideSelectScreen extends StatefulWidget {
 }
 
 class _GuideSelectScreenState extends State<GuideSelectScreen> {
+  final _guideInfoList = [
+    GuideListItem(
+        name: 'Enver Usta',
+        shortInfo: 'faucibus nisl tincidunt eget nullam non nisi est sit amet'),
+    GuideListItem(
+        name: 'Ahmet Demir',
+        shortInfo: 'faucibus nisl tincidunt eget nullam non nisi est sit amet'),
+    GuideListItem(
+        name: 'Burak Ekinci',
+        shortInfo: 'faucibus nisl tincidunt eget nullam non nisi est sit amet'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,22 +32,30 @@ class _GuideSelectScreenState extends State<GuideSelectScreen> {
         backgroundColor: AppColors.mainBackgroundColor,
         foregroundColor: AppColors.raisinBlack,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.raisinBlack),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 4.0.w),
-        child: Column(
-          children: <Widget>[
-            _buildGuideList(),
-            _buildGuideList(),
-            _buildGuideList(),
-          ],
-        ),
-      ),
+          margin: EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 4.0.w),
+          child: _buildGuideList(_guideInfoList)),
     );
   }
 }
 
-Widget _buildGuideList() {
-  return const Text('Hello World');
+Widget _buildGuideList(List<GuideListItem> guideInfoList) {
+  return ListView.builder(
+      itemCount: guideInfoList.length,
+      itemBuilder: (context, index) {
+        return _buildGuideListCard(guideInfoList[index]);
+      });
+}
+
+Widget _buildGuideListCard(GuideListItem guideItem) {
+  return GestureDetector(
+    child: const Card(
+      child: SizedBox(
+        width: 300,
+        height: 100,
+        child: Text('A card that can be tapped'),
+      ),
+    ),
+  );
 }
