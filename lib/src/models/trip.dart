@@ -7,6 +7,8 @@ class Trip {
   final DateTime goalDate;
   final String goalCountry;
   final String goalCity;
+  String? lastMessage;
+  DateTime? lastMessageTime;
 
   Trip({
     this.id,
@@ -17,6 +19,8 @@ class Trip {
     required this.goalCountry,
     required this.goalCity,
     required this.goalDate,
+    this.lastMessage,
+    this.lastMessageTime,
   });
 
   Trip.fromJson(Map<String, dynamic> json)
@@ -27,7 +31,9 @@ class Trip {
         touristAcceptance = json['touristAcceptance'],
         goalCountry = json['goalCountry'],
         goalCity = json['goalCity'],
-        goalDate = json['goalDate'];
+        goalDate = json['goalDate'],
+        lastMessage = json['lastMessage'],
+        lastMessageTime = json['lastMessageTime'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -38,5 +44,7 @@ class Trip {
         'goalCountry': goalCountry,
         'goalCity': goalCity,
         'goalDate': goalDate,
+        'lastMessage': lastMessage,
+        'lastMessageTime': lastMessageTime,
       };
 }

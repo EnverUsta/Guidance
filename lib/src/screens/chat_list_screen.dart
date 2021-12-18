@@ -121,7 +121,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             Card(
                               elevation: 0,
                               child: ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  //tripDocs[index]['id']  gönderilicek
+                                },
                                 leading: ConstrainedBox(
                                   constraints: BoxConstraints(
                                     maxHeight: 15.h,

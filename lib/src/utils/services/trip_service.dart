@@ -34,17 +34,16 @@ class TripService {
     }
   }
 
-  // ! Ahmet gerek olmayacak dedi
-  // Future<Trip> getTrip(String id) async {
-  //   var collection = FirebaseFirestore.instance.collection('trips');
-  //   var docSnapshot = await collection.doc(id).get();
-  //   if (docSnapshot.exists) {
-  //     Map<String, dynamic>? data = docSnapshot.data();
-  //     return Trip.fromJson(data!);
-  //   } else {
-  //     throw ("Not found Trip by this ID!");
-  //   }
-  // }
+  Future<Trip> getTripById(String id) async {
+    var collection = FirebaseFirestore.instance.collection('trips');
+    var docSnapshot = await collection.doc(id).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      return Trip.fromJson(data!);
+    } else {
+      throw ("Not found Trip by this ID!");
+    }
+  }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getTrips(
       String userId, String role) {
@@ -58,6 +57,51 @@ class TripService {
           .collection('trips')
           .where('guideId', isEqualTo: userId)
           .snapshots();
+    }
+  }
+
+  Future<void> updateLastMessageofTrip(
+      String tripId, String lastMessage, DateTime lastMessageTime) async {
+    try {
+      FirebaseFirestore.instance.collection('trips').doc(tripId).update(
+          {'lastMessage': lastMessage, 'lastMessageTime': lastMessageTime});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateTripDealStatus(
+      String tripId, String userId, bool decision) async {
+    try {
+      UserModel userModel = await userService.getUserById(userId);
+      if (userModel.role == "UserRole.guide") {
+        FirebaseFirestore.instance
+            .collection('trips')
+            .doc(tripId)
+            .update({'guideAcceptance': decision});
+      } else {
+        FirebaseFirestore.instance
+            .collection('trips')
+            .doc(tripId)
+            .update({'touristAcceptance': decision});
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool?> getTripStatusByTripId(String id) async {
+    UserModel userModel = await userService.getUserById(_auth.currentUser!.uid);
+    if (userModel.role == "UserRole.guide") {
+      var collection = FirebaseFirestore.instance.collection('trips');
+      var docSnapshot = await collection.doc(id).get();
+      Map<String, dynamic>? dS = docSnapshot.data();
+      return dS?['guideAcceptance'];
+    } else {
+      var collection = FirebaseFirestore.instance.collection('trips');
+      var docSnapshot = await collection.doc(id).get();
+      Map<String, dynamic>? dS = docSnapshot.data();
+      return dS?['touristAcceptance'];
     }
   }
 }
