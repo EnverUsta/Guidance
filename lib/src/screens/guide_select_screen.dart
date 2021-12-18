@@ -50,11 +50,14 @@ Widget _buildGuideList(List<GuideListItem> guideInfoList) {
 
 Widget _buildGuideListCard(GuideListItem guideItem) {
   return GestureDetector(
-    child: const Card(
-      child: SizedBox(
-        width: 300,
-        height: 100,
-        child: Text('A card that can be tapped'),
+    onTap: () {
+      debugPrint('Card tapped.');
+    },
+    child: Card(
+      child: ListTile(
+        leading: Image.asset('assets/images/Saly-11.png'),
+        title: Text(guideItem.name),
+        subtitle: Text(guideItem.shortInfo),
       ),
     ),
   );
