@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/user_model.dart';
+import 'package:guidance/src/screens/chat_list_page.dart';
 import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/guide_profile_guide.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
+  final authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -82,26 +84,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
-                    onPressed: () async{
-                      final authService = AuthService();
+                    onPressed: () async {
                       Future<bool?> result =
                           authService.signInWithEmailAndPassword(
                               email, password, widget.userRole);
-                              
-                      print(result.toString());
-                      print(result);
-                      print(result);
-                        
+
                       if (await result == true) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ChatPage(),
+                            builder: (context) => const ChatListPage(),
                           ),
                         );
-                      }else{
+                      } else {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => GuideProfileForGuide(),
+                            builder: (context) => const GuideProfileForGuide(),
                           ),
                         );
                       }

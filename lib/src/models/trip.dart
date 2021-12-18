@@ -1,20 +1,19 @@
 class Trip {
-  final String id;
+  String? id;
   final String guideId;
-  final String touristId;
-  final bool guideAcceptance;
-  final bool touristAcceptance;
-  //Datetime --sql lite doesn't support Date or like that type
-  final String goalDate;
+  String? touristId;
+  bool? guideAcceptance;
+  bool? touristAcceptance;
+  final DateTime goalDate;
   final String goalCountry;
   final String goalCity;
 
   Trip({
-    required this.id,
+    this.id,
     required this.guideId,
-    required this.touristId,
-    required this.guideAcceptance,
-    required this.touristAcceptance,
+    this.touristId,
+    this.guideAcceptance,
+    this.touristAcceptance,
     required this.goalCountry,
     required this.goalCity,
     required this.goalDate,
@@ -32,10 +31,10 @@ class Trip {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'guide': guideId,
-        'tourist': touristId,
+        'guideId': guideId,
+        'touristId': touristId,
         'guideAcceptance': guideAcceptance,
-        'toursitAcceptance': touristAcceptance,
+        'touristAcceptance': touristAcceptance,
         'goalCountry': goalCountry,
         'goalCity': goalCity,
         'goalDate': goalDate,

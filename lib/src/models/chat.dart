@@ -4,8 +4,8 @@ class Chat {
   String tripId;
   String userId;
   String message;
-  String ctime;
-  
+  DateTime ctime;
+
   Chat({
     required this.tripId,
     required this.userId,

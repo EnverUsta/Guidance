@@ -10,15 +10,20 @@ class ChatService {
   Future<void> createChat(String tripId, String message) async {
     try {
       Chat chat = Chat(
-          tripId: "11111",
-          userId: _auth.currentUser!.uid.toString(),
-          message: message,
-          ctime: DateTime.now().toString());
+        tripId: tripId,
+        userId: _auth.currentUser!.uid.toString(),
+        message: message,
+        ctime: DateTime.now(),
+      );
       FirebaseFirestore.instance.collection("chats").add(chat.toJson());
     } catch (e) {
       print('Error in createChat');
     }
   }
+
+  // Stream getLastMessage(String tripId) {
+  //   return _firestore.collection('chats').where('tripId', isEqualTo: tripId);
+  // }
 
   Future<Chat> getChat(String id) async {
     var collection = FirebaseFirestore.instance.collection('chats');
@@ -31,24 +36,10 @@ class ChatService {
     }
   }
 
-  Future<List<Chat>> getChats(String tripId) async {
-    QuerySnapshot<Map<String, dynamic>> data = await _firestore
+  Stream<QuerySnapshot<Map<String, dynamic>>> chatStream(String tripId) {
+    return _firestore
         .collection('chats')
         .where('tripId', isEqualTo: tripId)
-        //.orderBy('ctime')
-        .get();
-
-    List<Chat> chats = [];
-    data.docs.forEach((element) {
-      chats.add(Chat.fromJson(element.data()));
-    });
-    return chats;
-  }
-
-  getChatsSnapshot(String tripId){
-    return _firestore.collection('chats').where('tripId', isEqualTo: tripId).orderBy('ctime').snapshots();
-    
-
-
+        .snapshots();
   }
 }

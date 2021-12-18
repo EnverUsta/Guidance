@@ -9,32 +9,16 @@ import 'package:guidance/src/utils/services/chat_service.dart';
 import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
 
-addMessage(String tripId, String message) async {
-  ChatService cs = ChatService();
-  await cs.createChat(tripId, message);
-}
-
-FirebaseAuth user = FirebaseAuth.instance;
-
-Future<List<Chat>> getMessages(String tripId) async {
-  ChatService cs = ChatService();
-  List<Chat> chats = await cs.getChats("11111");
-  return chats;
-}
-
-List<Chat> tempChats = [];
-
-
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
-
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  ChatService chatService = ChatService();
 
   void scrollDown() async {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -47,63 +31,27 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  
-
-  TextEditingController messageController = TextEditingController();
-
-
-
-  sendMessage() {
-    addMessage("", messageController.text);
-
+  sendMessage() async {
+    await chatService.createChat("11111", messageController.text);
     scrollDown();
   }
 
-
-  Widget chatMessageList() {
-    chats.then((value) {
-      setState(() {
-        tempChats = value.toList();
-        tempChats.sort((a, b) => a.ctime.compareTo(b.ctime));
-
-      });
-    });
-
-    return ListView.builder(
-        controller: _scrollController,
-        itemCount: tempChats.length,
-        itemBuilder: (context, index) {
-          return MessageField(
-            message: tempChats[index].message,
-            sendByMe:
-                tempChats[index].userId == user.currentUser!.uid.toString()
-                    ? true
-                    : false,
-          );
-        });
+  addMessage(String tripId, String message) async {
+    await chatService.createChat(tripId, message);
   }
 
- 
-
+  TextEditingController messageController = TextEditingController();
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
   Color acceptButtonColor = Colors.green;
   Color declineButtonColor = Colors.red;
   late String message = "";
+  FirebaseAuth user = FirebaseAuth.instance;
 
- 
-
-  Future<List<Chat>> chats = getMessages("11111");
-  
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () => scrollDown()
-        //_scrollController.jumpTo(_scrollController.position.maxScrollExtent),
-        );
+    Timer(const Duration(milliseconds: 100), () => scrollDown());
 
     return Scaffold(
-      /*appBar: AppBar(
-          title: Text("Plan Your Trip"),
-        ),*/
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
@@ -245,65 +193,38 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget chatBodyBuilder() {
     return Expanded(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
-        //color: Colors.lightBlueAccent,
-        child: chatMessageList(),
+        child: StreamBuilder(
+          stream: chatService.chatStream('11111'),
+          builder: (BuildContext ctx, AsyncSnapshot chatSnapshot) {
+            //just add this line
+            if (chatSnapshot.data == null) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final chatDocs = chatSnapshot.data.docs as List;
+            chatDocs.sort((a, b) => a['ctime'].compareTo(b['ctime']));
+
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return MessageField(
+                    message: chatDocs[index]['message'].toString(),
+                    sendByMe:
+                        user.currentUser!.uid == chatDocs[index]['userId']);
+              },
+              itemCount: chatDocs.length,
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget textBoxBuilder() {
-    Widget textBox() {
-      return Expanded(
-        child: Container(
-          alignment: Alignment.bottomLeft,
-          //width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                  width: 0.05.w, color: Colors.grey, style: BorderStyle.solid)),
-          child: TextField(
-            //keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            minLines: 1,
-            maxLines: 5,
-            controller: messageController,
-            decoration: InputDecoration(
-                hintText: 'Write a message',
-                contentPadding: EdgeInsets.all(4.2.w),
-                border: InputBorder.none),
-            //onChanged: (value) {},
-          ),
-        ),
-      );
-    }
-
-    Widget sendButton() {
-      return Container(
-        alignment: Alignment.bottomRight,
-        child: IconButton(
-          onPressed: () {
-            //print(messageController.text); =
-            messageController.text = messageController.text.trim();
-            if (messageController.text.isNotEmpty) {
-              sendMessage();
-              setState(() {
-                message = messageController.text;
-              });
-              messageController.clear();
-            }
-          },
-          icon: const Icon(
-            Icons.send,
-            color: Colors.black,
-          ),
-        ),
-      );
-    }
-
     return SizedBox(
-      //height: MediaQuery.of(context).size.height * 0.1,
       child: Stack(
         children: [
           Align(
@@ -317,8 +238,50 @@ class _ChatPageState extends State<ChatPage> {
               color: Colors.white,
               child: Row(
                 children: [
-                  textBox(),
-                  sendButton(),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomLeft,
+                      //width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              width: 0.05.w,
+                              color: Colors.grey,
+                              style: BorderStyle.solid)),
+                      child: TextField(
+                        //keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        minLines: 1,
+                        maxLines: 5,
+                        controller: messageController,
+                        decoration: InputDecoration(
+                            hintText: 'Write a message',
+                            contentPadding: EdgeInsets.all(4.2.w),
+                            border: InputBorder.none),
+                        //onChanged: (value) {},
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      onPressed: () {
+                        //print(messageController.text); =
+                        messageController.text = messageController.text.trim();
+                        if (messageController.text.isNotEmpty) {
+                          sendMessage();
+                          setState(() {
+                            message = messageController.text;
+                          });
+                          messageController.clear();
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
