@@ -45,16 +45,16 @@ updateGuideInfo(String newIntro, List<String> newhobbies) async {
       _auth.currentUser!.uid.toString(), newIntro, newhobbies);
 }
 
-class GuideProfileForGuide extends StatefulWidget {
-  const GuideProfileForGuide({Key? key}) : super(key: key);
+class GuideProfileScreen extends StatefulWidget {
+  const GuideProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _GuideProfileForGuideState();
+    return _GuideProfileScreenState();
   }
 }
 
-class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
+class _GuideProfileScreenState extends State<GuideProfileScreen> {
   var editToggle = false;
 
   Future<GuideInfo> guideInfo = getGuideInfo();

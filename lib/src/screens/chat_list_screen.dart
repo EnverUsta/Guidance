@@ -4,13 +4,13 @@ import 'package:guidance/src/models/myChatModel.dart';
 import 'package:guidance/src/utils/services/trip_service.dart';
 import 'package:sizer/sizer.dart';
 
-class ChatListPage extends StatefulWidget {
-  const ChatListPage({Key? key}) : super(key: key);
+class ChatListScreen extends StatefulWidget {
+  const ChatListScreen({Key? key}) : super(key: key);
   @override
-  _ChatListPageState createState() => _ChatListPageState();
+  _ChatListScreenState createState() => _ChatListScreenState();
 }
 
-class _ChatListPageState extends State<ChatListPage> {
+class _ChatListScreenState extends State<ChatListScreen> {
   List<ChatModel> chatList = ChatModel.list;
   final tripService = TripService();
   final FirebaseAuth _auth = FirebaseAuth.instance;

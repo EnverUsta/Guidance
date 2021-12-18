@@ -4,13 +4,13 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-class TripPlan extends StatefulWidget {
-  const TripPlan({Key? key}) : super(key: key);
+class TripPlanScreen extends StatefulWidget {
+  const TripPlanScreen({Key? key}) : super(key: key);
   @override
-  State<TripPlan> createState() => _TripPlanState();
+  State<TripPlanScreen> createState() => _TripPlanScreenState();
 }
 
-class _TripPlanState extends State<TripPlan> {
+class _TripPlanScreenState extends State<TripPlanScreen> {
   var planTripFormKey = GlobalKey<FormState>();
   String? country;
   String? city;

@@ -9,16 +9,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
 import 'package:sizer/sizer.dart';
 
-class GuideProfileForTourist extends StatefulWidget {
-  const GuideProfileForTourist({Key? key}) : super(key: key);
+class TouristProfileScreen extends StatefulWidget {
+  const TouristProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _GuideProfileForTouristState();
+    return _TouristProfileScreenState();
   }
 }
 
-class _GuideProfileForTouristState extends State<GuideProfileForTourist> {
+class _TouristProfileScreenState extends State<TouristProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
