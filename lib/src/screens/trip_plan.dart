@@ -201,8 +201,8 @@ class _TripPlanState extends State<TripPlan> {
           if (planTripFormKey.currentState!.validate() &&
               tripDateTime != null) {
             planTripFormKey.currentState!.save();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Empty(country!, city!, tripTimeStr)));
+            // * We won't go to any screen anymore here
+            // * Therefore, please add the necessary screen here
           } else if (tripDateTime == null) {
             showAlert(context, "Empty Field!", "Please select a date");
           }

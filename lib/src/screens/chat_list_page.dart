@@ -83,7 +83,7 @@ class _ChatListPageState extends State<ChatListPage> {
                                     Container(
                                         height: 4.h,
                                         width: 4.h,
-                                        margin: EdgeInsets.all(5),
+                                        margin: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(
                                             color:
                                                 chatList[index].isDeal == true

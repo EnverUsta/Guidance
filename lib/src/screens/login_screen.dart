@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
-import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/screens/chat_list_page.dart';
-import 'package:guidance/src/screens/chat_page.dart';
 import 'package:guidance/src/screens/guide_profile_guide.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
-import 'package:guidance/src/screens/trip_plan.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 

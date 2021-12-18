@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
-import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:sizer/sizer.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -174,8 +172,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       final auth = AuthService();
-                      auth.registerWithEmailAndPassword(
-                          email, password, name, surname, widget.userRole, country, city);
+                      auth.registerWithEmailAndPassword(email, password, name,
+                          surname, widget.userRole, country, city);
                     },
                     child: const Text(
                       'Signup',

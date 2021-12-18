@@ -21,7 +21,6 @@ class AuthService {
     try {
       UserCredential authResponse = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      print(authResponse.user!.uid);
       final userModel = UserModel(
         id: authResponse.user!.uid,
         email: email,
@@ -34,12 +33,9 @@ class AuthService {
       await userService.createUser(userModel);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+      } else if (e.code == 'email-already-in-use') {}
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
@@ -49,7 +45,7 @@ class AuthService {
     try {
       UserCredential response = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      
+
       UserModel um = await userService.getUserInfo(email);
 
       /*
@@ -61,7 +57,7 @@ class AuthService {
         print(user.role);
       });
       */
-      
+
       return um.role == role.toString() ? true : false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

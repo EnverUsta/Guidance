@@ -7,7 +7,8 @@ class MessageField extends StatelessWidget {
   final String message;
   final bool sendByMe;
 
-  MessageField({required this.message, required this.sendByMe});
+  const MessageField({Key? key, required this.message, required this.sendByMe})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class MessageField extends StatelessWidget {
           color: sendByMe
               ? const Color.fromRGBO(89, 205, 242, 1)
               : const Color(0xFFFFFFFF),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               offset: Offset(0.0, 1.0), //(x,y)

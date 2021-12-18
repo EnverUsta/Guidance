@@ -17,7 +17,7 @@ class GuideInfoService {
       Map<String, dynamic> data = guideInfo.toJson();
       await documentReferencer.set(data);
     } catch (e) {
-      print('Error in createGuideInfo');
+      rethrow;
     }
   }
 
@@ -48,7 +48,7 @@ class GuideInfoService {
       var collection = FirebaseFirestore.instance.collection('guideInfos');
       await collection.doc(userId).delete();
     } catch (e) {
-      print('Error in createGuideInfo');
+      rethrow;
     }
   }
 
@@ -60,11 +60,7 @@ class GuideInfoService {
           .doc(_auth.currentUser!.uid)
           .update({'introducion': newintro, 'hobbies': newhobbies});
     } catch (e) {
-      print('Error in createGuideInfo');
+      rethrow;
     }
   }
-
-
-
-  
 }

@@ -175,7 +175,6 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
               onPressed: () => setState(() {
                 if (editToggle) {
                   updateGuideInfo(intro, hobbies);
-                  print(hobbies);
                 }
                 editToggle = !editToggle;
               }),
@@ -293,7 +292,6 @@ class _GuideProfileForGuideState extends State<GuideProfileForGuide> {
                       hobbies.removeAt(index);
                       updateGuideInfo(intro, hobbies);
                       guideInfo = getGuideInfo();
-                     
                     });
                   },
                   constraints: const BoxConstraints(maxWidth: 20),

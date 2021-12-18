@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guidance/src/models/deal.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('deals');
-final FirebaseAuth _auth = FirebaseAuth.instance;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class DealService {
   Future<void> createDeal(Deal deal) async {
@@ -13,7 +12,7 @@ class DealService {
       Map<String, dynamic> data = deal.toJson();
       await documentReferencer.set(data);
     } catch (e) {
-      print('Error in createDeal');
+      rethrow;
     }
   }
 
