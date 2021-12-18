@@ -45,13 +45,13 @@ class _NavbarGuideState extends State<NavbarGuide> {
           backgroundColor: AppColors.mainBackgroundColor,
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.sort_rounded,
-                size: 30,
-              ),
-              label: "",
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(
+            //     Icons.sort_rounded,
+            //     size: 30,
+            //   ),
+            //   label: "",
+            // ),
             BottomNavigationBarItem(
               icon: Icon(
                 CustomIcons.comment,
