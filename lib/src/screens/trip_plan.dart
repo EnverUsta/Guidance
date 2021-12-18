@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guidance/src/screens/empty.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
