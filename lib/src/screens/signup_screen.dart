@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
+import 'package:guidance/src/utils/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -12,7 +13,13 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'English';
+
+  String name = "";
+  String surname = "";
+  String email = "";
+  String password = "";
+  String country = "";
+  String city = "";
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Name',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        name = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -59,7 +68,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Surname',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        surname = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -79,7 +90,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        email = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -99,7 +112,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        password = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -108,29 +123,43 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 3.h,
                 ),
                 Card(
-                  elevation: 5,
+                  elevation: 4,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5.w,
-                      vertical: 1.h,
-                    ),
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: dropdownValue,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      underline: const SizedBox(),
-                      items: <String>['English']
-                          .map<DropdownMenuItem<String>>(
-                              (String value) => DropdownMenuItem<String>(
-                                    child: Text(value),
-                                    value: value,
-                                  ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        dropdownValue = newValue.toString();
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Country',
+                      ),
+                      onChanged: (value) {
+                        country = value;
                       },
+                      validator: (value) {},
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Card(
+                  elevation: 4,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'City',
+                      ),
+                      onChanged: (value) {
+                        city = value;
+                      },
+                      validator: (value) {},
                     ),
                   ),
                 ),
@@ -141,7 +170,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final auth = AuthService();
+                      auth.registerWithEmailAndPassword(email, password, name,
+                          surname, widget.userRole, country, city);
+                    },
                     child: const Text(
                       'Signup',
                       style: TextStyle(

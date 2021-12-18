@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/screens/login_screen.dart';
 import 'package:sizer/sizer.dart';
 

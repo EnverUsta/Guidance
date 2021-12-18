@@ -1,4 +1,12 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:guidance/src/models/chat.dart';
+import 'package:guidance/src/utils/services/chat_service.dart';
+import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatPage extends StatefulWidget {
@@ -9,30 +17,56 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final ScrollController _scrollController = ScrollController();
+  ChatService chatService = ChatService();
+
+  void scrollDown() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.fastOutSlowIn);
+      }
+    });
+  }
+
+  sendMessage() async {
+    await chatService.createChat("11111", messageController.text);
+    scrollDown();
+  }
+
+  addMessage(String tripId, String message) async {
+    await chatService.createChat(tripId, message);
+  }
+
+  TextEditingController messageController = TextEditingController();
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
   Color acceptButtonColor = Colors.green;
   Color declineButtonColor = Colors.red;
   late String message = "";
+  FirebaseAuth user = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    //var screenSize = MediaQuery.of(context).size;
+    Timer(const Duration(milliseconds: 100), () => scrollDown());
+
     return Scaffold(
-      /*appBar: AppBar(
-          title: Text("Plan Your Trip"),
-        ),*/
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.all(2.h),
-          child: Column(
-            children: [
-              upperBarBuilder(),
-              SizedBox(
-                height: 4.h,
-              ),
-              chatBodyBuilder(),
-              textBoxBuilder(),
-            ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: Container(
+            margin: EdgeInsets.all(2.h),
+            child: Column(
+              children: [
+                upperBarBuilder(),
+                SizedBox(
+                  height: 4.h,
+                ),
+                chatBodyBuilder(),
+                textBoxBuilder(),
+              ],
+            ),
           ),
         ),
       ),
@@ -159,66 +193,38 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget chatBodyBuilder() {
     return Expanded(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
-        color: Colors.lightBlueAccent,
-        child: Text(message),
+        child: StreamBuilder(
+          stream: chatService.chatStream('11111'),
+          builder: (BuildContext ctx, AsyncSnapshot chatSnapshot) {
+            //just add this line
+            if (chatSnapshot.data == null) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final chatDocs = chatSnapshot.data.docs as List;
+            chatDocs.sort((a, b) => a['ctime'].compareTo(b['ctime']));
+
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return MessageField(
+                    message: chatDocs[index]['message'].toString(),
+                    sendByMe:
+                        user.currentUser!.uid == chatDocs[index]['userId']);
+              },
+              itemCount: chatDocs.length,
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget textBoxBuilder() {
-    TextEditingController _messageController = TextEditingController();
-
-    Widget textBox() {
-      return Expanded(
-        child: Container(
-          alignment: Alignment.bottomLeft,
-          //width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                  width: 0.05.w, color: Colors.grey, style: BorderStyle.solid)),
-          child: TextField(
-            //keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            minLines: 1,
-            maxLines: 5,
-            controller: _messageController,
-            decoration: InputDecoration(
-                hintText: 'Write a message',
-                contentPadding: EdgeInsets.all(4.2.w),
-                border: InputBorder.none),
-            //onChanged: (value) {},
-          ),
-        ),
-      );
-    }
-
-    Widget sendButton() {
-      return Container(
-        alignment: Alignment.bottomRight,
-        child: IconButton(
-          onPressed: () {
-            //print(messageController.text); =
-            _messageController.text = _messageController.text.trim();
-            if (_messageController.text.isNotEmpty) {
-              setState(() {
-                message = _messageController.text;
-              });
-              _messageController.clear();
-            }
-          },
-          icon: const Icon(
-            Icons.send,
-            color: Colors.black,
-          ),
-        ),
-      );
-    }
-
     return SizedBox(
-      //height: MediaQuery.of(context).size.height * 0.1,
       child: Stack(
         children: [
           Align(
@@ -232,8 +238,50 @@ class _ChatPageState extends State<ChatPage> {
               color: Colors.white,
               child: Row(
                 children: [
-                  textBox(),
-                  sendButton(),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomLeft,
+                      //width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              width: 0.05.w,
+                              color: Colors.grey,
+                              style: BorderStyle.solid)),
+                      child: TextField(
+                        //keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        minLines: 1,
+                        maxLines: 5,
+                        controller: messageController,
+                        decoration: InputDecoration(
+                            hintText: 'Write a message',
+                            contentPadding: EdgeInsets.all(4.2.w),
+                            border: InputBorder.none),
+                        //onChanged: (value) {},
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      onPressed: () {
+                        //print(messageController.text); =
+                        messageController.text = messageController.text.trim();
+                        if (messageController.text.isNotEmpty) {
+                          sendMessage();
+                          setState(() {
+                            message = messageController.text;
+                          });
+                          messageController.clear();
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

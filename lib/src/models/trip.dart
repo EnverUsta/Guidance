@@ -1,55 +1,42 @@
-import 'country.dart';
-import 'city.dart';
-import 'user.dart';
-
 class Trip {
-  final String id;
-  final User guide;
-  final User tourist;
-  final bool guideAcceptance;
-  final bool touristAcceptance;
-  //Datetime --sql lite doesn't support Date or like that type
-  final String goalDate;
-  final Country goalCountry;
-  final City goalCity;
-  final String ctime;
-  final String utime;
+  String? id;
+  final String guideId;
+  String? touristId;
+  bool? guideAcceptance;
+  bool? touristAcceptance;
+  final DateTime goalDate;
+  final String goalCountry;
+  final String goalCity;
 
   Trip({
-    required this.id,
-    required this.guide,
-    required this.tourist,
-    required this.guideAcceptance,
-    required this.touristAcceptance,
+    this.id,
+    required this.guideId,
+    this.touristId,
+    this.guideAcceptance,
+    this.touristAcceptance,
     required this.goalCountry,
     required this.goalCity,
     required this.goalDate,
-    required this.ctime,
-    required this.utime,
   });
 
   Trip.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        guide = json['guide'],
-        tourist = json['tourist'],
+        guideId = json['guideId'],
+        touristId = json['touristId'],
         guideAcceptance = json['guideAcceptance'],
         touristAcceptance = json['touristAcceptance'],
         goalCountry = json['goalCountry'],
         goalCity = json['goalCity'],
-        goalDate = json['goalDate'],
-        ctime = json['ctime'],
-        utime = json['utime'];
+        goalDate = json['goalDate'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'guide': guide,
-        'tourist': tourist,
+        'guideId': guideId,
+        'touristId': touristId,
         'guideAcceptance': guideAcceptance,
-        'toursitAcceptance': touristAcceptance,
+        'touristAcceptance': touristAcceptance,
         'goalCountry': goalCountry,
         'goalCity': goalCity,
         'goalDate': goalDate,
-        'ctime': ctime,
-        'utime': utime,
       };
 }

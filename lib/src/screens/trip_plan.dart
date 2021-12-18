@@ -197,19 +197,14 @@ class _TripPlanState extends State<TripPlan> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 4.h),
         ),
         onPressed: () {
-          // if (planTripFormKey.currentState!.validate() &&
-          //     tripDateTime != null) {
-          //   planTripFormKey.currentState!.save();
-
-          //   Trip tripPlan = Trip(country!, city!, language!, tripDateTime!);
-
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => Empty(tripPlan)));
-
-          //Navigator.pop(context);
-          // } else if (tripDateTime == null) {
-          //   showAlert(context, "Empty Field!", "Please select a date");
-          // }
+          if (planTripFormKey.currentState!.validate() &&
+              tripDateTime != null) {
+            planTripFormKey.currentState!.save();
+            // * We won't go to any screen anymore here
+            // * Therefore, please add the necessary screen here
+          } else if (tripDateTime == null) {
+            showAlert(context, "Empty Field!", "Please select a date");
+          }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

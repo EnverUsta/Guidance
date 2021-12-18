@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:guidance/src/constants/user_role.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
+import 'package:guidance/src/screens/chat_list_page.dart';
+import 'package:guidance/src/screens/guide_profile_guide.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
+import 'package:guidance/src/utils/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +16,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  String email = "";
+  String password = "";
+  final authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        email = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -59,7 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        password = value;
+                      },
                       validator: (value) {},
                     ),
                   ),
@@ -71,7 +81,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 85.w,
                   height: 6.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Future<bool?> result =
+                          authService.signInWithEmailAndPassword(
+                              email, password, widget.userRole);
+
+                      if (await result == true) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const ChatListPage(),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const GuideProfileForGuide(),
+                          ),
+                        );
+                      }
+                    },
                     child: const Text(
                       'Login',
                       style: TextStyle(
