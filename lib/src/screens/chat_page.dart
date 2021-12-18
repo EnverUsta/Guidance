@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:guidance/src/models/chat.dart';
 import 'package:guidance/src/utils/services/chat_service.dart';
 import 'package:guidance/src/widgets/message_field.dart';
 import 'package:sizer/sizer.dart';
