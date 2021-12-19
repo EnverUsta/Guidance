@@ -34,7 +34,7 @@ class GuideInfoService {
 
   Future<List<GuideInfo>> getGuideInfos() async {
     QuerySnapshot<Map<String, dynamic>> data =
-        await _firestore.collection('GuideInfos').get();
+        await _firestore.collection('guideInfos').get();
 
     List<GuideInfo> guideInfos = [];
     data.docs.forEach((element) {
