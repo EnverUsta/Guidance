@@ -6,7 +6,7 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:guidance/src/models/guide_info.dart';
 
 final FirebaseFirestore _firestore = FakeFirebaseFirestore();
-final CollectionReference _mainCollection = _firestore.collection('users');
+final CollectionReference _mainCollection = _firestore.collection('guideInfos');
 final FirebaseAuth _auth = MockFirebaseAuth();
 
 class MGuideInfoService {
@@ -25,7 +25,7 @@ class MGuideInfoService {
   }
 
   Future<GuideInfo> getGuideInfo(String id) async {
-    var collection = FakeFirebaseFirestore().collection('guideInfos');
+    var collection = _firestore.collection('guideInfos');
     var docSnapshot = await collection.doc(id).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
@@ -37,7 +37,7 @@ class MGuideInfoService {
 
   Future<List<GuideInfo>> getGuideInfos() async {
     QuerySnapshot<Map<String, dynamic>> data =
-        await _firestore.collection('GuideInfos').get();
+        await _firestore.collection('guideInfos').get();
 
     List<GuideInfo> guideInfos = [];
     data.docs.forEach((element) {
@@ -48,7 +48,7 @@ class MGuideInfoService {
 
   Future<void> deleteGuideInfo(String userId) async {
     try {
-      var collection = FakeFirebaseFirestore().collection('guideInfos');
+      var collection = _firestore.collection('guideInfos');
       await collection.doc(userId).delete();
     } catch (e) {
       rethrow;
