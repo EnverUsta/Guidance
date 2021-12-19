@@ -59,23 +59,40 @@ Widget _buildGuideListCard(GuideListItem guideItem) {
       debugPrint('Card tapped.');
     },
     child: Container(
-      height: 20.h,
-      width: 80.w,
-      margin: EdgeInsets.symmetric(vertical: 0.1.h),
+      margin: EdgeInsets.symmetric(vertical: 0.2.h),
       child: Card(
-        color: AppColors.lighterBackgroundColor,
-        child: ListTile(
-          leading: Container(
-            height: 18.h,
-            child: Image.asset(
-              'assets/images/Saly-portrait.png',
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          title: Text(guideItem.name),
-          subtitle: Text(guideItem.shortInfo),
-        ),
-      ),
+          color: AppColors.lighterBackgroundColor,
+          child: Container(
+              width: 80.w,
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
+                    height: 15.h,
+                    width: 15.h,
+                    child: Image.asset('assets/images/Saly-portrait.png',
+                        fit: BoxFit.fitHeight),
+                  ),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          guideItem.name,
+                          style: TextStyle(
+                              color: AppColors.fireOpal,
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Container(width: 50.w, child: Text(guideItem.shortInfo))
+                      ],
+                    ),
+                  )
+                ],
+              ))),
     ),
   );
 }
