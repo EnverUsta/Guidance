@@ -11,6 +11,7 @@ import 'package:guidance/src/utils/test_mocks/mock_user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:guidance/src/utils/test_mocks/mock_guide_info_service.dart';
 
 
 void main() async {
@@ -36,8 +37,10 @@ void main() async {
     expect(1, user.length);
   });
 
-    test('user_service | firebase getUserInfo unit-test', () async {
+  test('user_service | firebase getUserInfo unit-test', () async {
     var user = await ts.getUserInfo("by@gm");
     expect("Berke", user.name);
   });
+
+  var guideservice = MGuideInfoService();
 }
