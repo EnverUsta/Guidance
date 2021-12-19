@@ -1,9 +1,3 @@
-/*
-*   Author : @burakekinci
-*   Guide profile page from the view of 'Guide'
-*
-*/
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,13 +8,6 @@ import 'package:guidance/src/utils/services/guide_info_service.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
-
-String name = "";
-String surname = "";
-String intro = "";
-List<String> hobbies = []; // hobbies
-//String newIntro = "";
-//List<String> newHobbie = [];
 
 Future<GuideInfo> getGuideInfo() async {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -56,29 +43,92 @@ class GuideProfileScreen extends StatefulWidget {
 
 class _GuideProfileScreenState extends State<GuideProfileScreen> {
   var editToggle = false;
+  GuideInfoService guideInfoService = GuideInfoService();
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  TextEditingController introductionController = TextEditingController();
 
-  Future<GuideInfo> guideInfo = getGuideInfo();
-  Future<UserModel> user = getUser();
+  Future<void> _showMyDialog(GuideInfo guideInfo) async {
+    TextEditingController hobbyCtrl = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text('Please enter a hobby'),
+                TextField(
+                  controller: hobbyCtrl,
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Save'),
+              onPressed: () async {
+                hobbyCtrl.text.trim();
+                if (!hobbyCtrl.text.isEmpty) {
+                  setState(() {
+                    guideInfo.hobbies.add(hobbyCtrl.text);
+                  });
+                  await guideInfoService.updateGuideInfo(guideInfo.userId,
+                      guideInfo.introducion, guideInfo.hobbies);
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 4.0.w),
-        child: Column(
-          children: <Widget>[
-            _buildProfileText(),
-            _buildProfileImageRow(),
-            SizedBox(
-              height: 2.5.h,
-            ),
-            // _buildIntroduction(),
-            _buildHobbiesText(),
-            _buildHobbyItems(),
-            Visibility(visible: editToggle, child: _buildAddButton()),
-          ],
-        ),
+      body: FutureBuilder<GuideInfo>(
+        future: guideInfoService.getGuideInfo(currentUserId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final guide = snapshot.data!;
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+              child: ListView(
+                children: <Widget>[
+                  _buildProfileText(),
+                  _buildProfileImageRow(guide),
+                  SizedBox(
+                    height: 2.5.h,
+                  ),
+                  _buildIntroduction(
+                    guide.introducion,
+                    introductionController,
+                  ),
+                  _buildHobbiesText(guide),
+                  _buildHobbyItems(guide.hobbies),
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
@@ -99,102 +149,103 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
     );
   }
 
-  Widget _buildProfileImageRow() {
-    user.then((UserModel value) {
-      setState(() {
-        name = value.name.toString();
-        surname = value.surname.toString();
-      });
-    });
-    return Container(
-      margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h),
-      width: double.infinity,
-      height: 18.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          //Profile image area
-          Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Image.network(
-              "https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
+  Widget _buildProfileImageRow(GuideInfo guideInfo) {
+    return FutureBuilder<UserModel>(
+        future: UserService().getUserById(currentUserId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h, right: 2.h),
+              width: double.infinity,
               height: 18.h,
-              width: 17.h,
-              fit: BoxFit.fill,
-            ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-          //End of Profile image area
-          //Using container for responsive widget (sizer package usage)
-          SizedBox(width: 3.5.w),
-          //Profile name and desc area
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  name + " " + surname,
-                  style: GoogleFonts.nunito(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.raisinBlack),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  //Profile image area
+                  Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Image.network(
+                      "https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
+                      height: 15.h,
+                      width: 15.h,
+                      fit: BoxFit.fill,
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                  //End of Profile image area
+                  //Using container for responsive widget (sizer package usage)
+                  SizedBox(width: 3.5.w),
+                  //Profile name and desc area
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          snapshot.data!.name + " " + snapshot.data!.surname,
+                          style: GoogleFonts.nunito(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.raisinBlack),
+                        ),
+                      ),
+                    ],
+                  ),
+                  //End of Profile name end desc area
+                  //Using container for responsive widget (sizer package usage)
+                  SizedBox(width: 6.w),
+                  //Edit button
+                  Container(
+                    height: 6.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (editToggle) {
+                              updateGuideInfo(
+                                introductionController.text,
+                                guideInfo.hobbies,
+                              );
+                            }
+                            editToggle = !editToggle;
+                          });
+                        },
+                        icon: const Icon(
+                            Icons.drive_file_rename_outline_outlined),
+                      ),
+                    ),
+                  ),
+                  //End of Edit button
+                ],
               ),
-              Text(
-                "Software Developer",
-                style: GoogleFonts.nunito(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.raisinBlackLight),
-              ),
-            ],
-          ),
-          //End of Profile name end desc area
-          //Using container for responsive widget (sizer package usage)
-          SizedBox(width: 3.5.w),
-          //Edit button
-          Container(
-            height: 6.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            child: Center(
-                child: IconButton(
-              onPressed: () => setState(() {
-                if (editToggle) {
-                  updateGuideInfo(intro, hobbies);
-                }
-                editToggle = !editToggle;
-              }),
-              icon: const Icon(Icons.drive_file_rename_outline_outlined),
-            )),
-          ),
-          //End of Edit button
-        ],
-      ),
-    );
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
-  Future<Widget> _buildIntroduction() async {
-    await guideInfo.then((GuideInfo value) {
-      setState(() {
-        intro = value.introducion.toString();
-      });
-
-      //print(value.introducion.toString());
-    });
+  Widget _buildIntroduction(
+      String introduction, TextEditingController introductionController) {
+    introductionController.text = introduction;
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -214,57 +265,62 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               ),
             ),
             //INTRODUCTION Content
-            Padding(
-              padding: EdgeInsets.only(top: 0.h),
-              child: Text(
-                intro, //introduction
-                style: GoogleFonts.lora(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black),
+            if (editToggle)
+              Padding(
+                padding: EdgeInsets.only(top: 1.h),
+                child: TextField(
+                  controller: introductionController,
+                ),
+              )
+            else
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 1.h),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    readOnly: true,
+                    enabled: false,
+                    controller: introductionController,
+                  ),
+                ),
               ),
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHobbyItems() {
-    guideInfo.then((GuideInfo value) {
-      //print(value.introducion.toString());
-      var hobbiesFromJson = value.hobbies;
-      setState(() {
-        hobbies = List<String>.from(hobbiesFromJson);
-      });
-    });
-
+  Widget _buildHobbyItems(List<String> hobbies) {
     return SizedBox(
       height: 4.5.h,
       child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          key: Key(hobbies.length.toString()),
-          itemCount: hobbies.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              child: Align(
-                alignment: Alignment.center,
-                child: itemCard(index),
-              ),
-            );
-          }),
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        key: Key(hobbies.length.toString()),
+        itemCount: hobbies.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            child: Align(
+              alignment: Alignment.center,
+              child: itemCard(hobbies, index),
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget itemCard(int index) {
+  Widget itemCard(List<String> hobbies, int index) {
     if (editToggle) {
       return Card(
         margin: EdgeInsets.symmetric(vertical: 0.h, horizontal: 1.w),
         color: AppColors.fireOpal,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: SizedBox(
-          height: 4.5.h,
+          height: 6.h,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 2.0.w),
             child: Row(
@@ -273,25 +329,33 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               children: [
                 Container(
                   margin: EdgeInsets.only(left: 1.8.w, right: 1.w),
-                  width: 15.w,
-                  child: TextFormField(
-                    initialValue: hobbies[index],
-                    onFieldSubmitted: (value) => {},
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 5.w),
-                        border: InputBorder.none),
-                    style: TextStyle(
+                  child: Text(
+                    hobbies[index],
+                    maxLines: 1,
+                    style: GoogleFonts.nunito(
                       fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
+                  // child: TextFormField(
+                  //   initialValue: hobbies[index],
+                  //   onFieldSubmitted: (value) => {},
+                  //   decoration: InputDecoration(
+                  //       contentPadding: EdgeInsets.only(bottom: 5.w),
+                  //       border: InputBorder.none),
+                  //   style: TextStyle(
+                  //     fontSize: 14.sp,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                 ),
                 IconButton(
                   onPressed: () {
                     setState(() {
                       hobbies.removeAt(index);
-                      updateGuideInfo(intro, hobbies);
-                      guideInfo = getGuideInfo();
+                      updateGuideInfo(introductionController.text, hobbies);
+                      // guideInfo = getGuideInfo();
                     });
                   },
                   constraints: const BoxConstraints(maxWidth: 20),
@@ -309,13 +373,13 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
         color: AppColors.fireOpal,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: SizedBox(
-          height: 4.5.h,
-          width: 20.w,
+          height: 6.h,
           child: Center(
             child: Padding(
               padding: EdgeInsets.only(left: 1.0.w, right: 1.0.w),
               child: Text(
                 hobbies[index],
+                maxLines: 1,
                 style: GoogleFonts.nunito(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
@@ -328,46 +392,35 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
     }
   }
 
-  Widget _buildHobbiesText() {
+  Widget _buildHobbiesText(GuideInfo guideInfo) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 0),
+      margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 0),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 0.6.h, horizontal: 4.w),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Text(
-            "Hobbies",
-            style: GoogleFonts.nunito(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.fireOpal),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Hobbies",
+                style: GoogleFonts.nunito(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.fireOpal),
+              ),
+              editToggle
+                  ? Card(
+                      child: IconButton(
+                        onPressed: () async {
+                          await _showMyDialog(guideInfo);
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    )
+                  : Container()
+            ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddButton() {
-    return Container(
-      width: 100.w,
-      height: 8.h,
-      margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 0.w),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          primary: AppColors.budGreen,
-        ),
-        onPressed: () => setState(() {
-          TextFieldAlertDialog(list: hobbies);
-        }),
-        child: Text(
-          "Add",
-          style: GoogleFonts.nunito(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white),
         ),
       ),
     );

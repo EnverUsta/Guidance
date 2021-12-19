@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
-import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthService _authservice = AuthService();
-    UserService userService = UserService();
     return Sizer(builder:
         (BuildContext context, Orientation orientation, DeviceType deviceType) {
       return MaterialApp(
