@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Mail',
                       ),
                       onChanged: (value) {
-                        email = value;
+                        email = value.trim();
                       },
                       validator: (value) {},
                     ),

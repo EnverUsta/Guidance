@@ -159,44 +159,43 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               width: double.infinity,
               height: 18.h,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   //Profile image area
                   Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.network(
-                      "https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
-                      height: 15.h,
-                      width: 15.h,
-                      fit: BoxFit.fill,
+                    child: Image.asset(
+                      "assets/images/Saly-11.png",
+                      //"https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
+                      height: 25.w,
+                      width: 25.w,
+                      fit: BoxFit.cover,
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   //End of Profile image area
                   //Using container for responsive widget (sizer package usage)
-                  SizedBox(width: 3.5.w),
+                  SizedBox(width: 2.w),
                   //Profile name and desc area
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          snapshot.data!.name + " " + snapshot.data!.surname,
-                          style: GoogleFonts.nunito(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.raisinBlack),
-                        ),
-                      ),
-                    ],
+
+                  Container(
+                    // color: Colors.red,
+                    width: 43.w,
+                    child: Text(
+                      snapshot.data!.name + " " + snapshot.data!.surname,
+                      style: GoogleFonts.nunito(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.raisinBlack),
+                    ),
                   ),
+
                   //End of Profile name end desc area
                   //Using container for responsive widget (sizer package usage)
-                  SizedBox(width: 6.w),
+                  // SizedBox(width: 2.w),
                   //Edit button
                   Container(
                     height: 6.h,
@@ -273,18 +272,15 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                 ),
               )
             else
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                    readOnly: true,
-                    enabled: false,
-                    controller: introductionController,
+              Padding(
+                padding: EdgeInsets.only(top: 1.h),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
                   ),
+                  readOnly: true,
+                  enabled: false,
+                  controller: introductionController,
                 ),
               ),
           ],
@@ -410,15 +406,20 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                     color: AppColors.fireOpal),
               ),
               editToggle
-                  ? Card(
-                      child: IconButton(
-                        onPressed: () async {
-                          await _showMyDialog(guideInfo);
-                        },
-                        icon: const Icon(Icons.add),
+                  ? Container(
+                      height: 7.h,
+                      child: Card(
+                        child: IconButton(
+                          onPressed: () async {
+                            await _showMyDialog(guideInfo);
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
                       ),
                     )
-                  : Container()
+                  : Container(
+                      height: 7.h,
+                    )
             ],
           ),
         ),

@@ -150,7 +150,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                             maxHeight: 15.h,
                                           ),
                                           child: Image.asset(
-                                              "assets/images/Saly-11.png",
+                                              userRole != 'UserRole.guide' ? "assets/images/Saly-11.png": "assets/images/Saly-1.png"
+                                              ,
                                               fit: BoxFit.cover),
                                         ),
                                         title: Row(

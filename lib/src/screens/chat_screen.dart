@@ -13,7 +13,8 @@ class ChatScreen extends StatefulWidget {
   final String otherUserId;
   final String tripId;
 
-  const ChatScreen({Key? key, required this.tripId, required this.otherUserId}) : super(key: key);
+  const ChatScreen({Key? key, required this.tripId, required this.otherUserId})
+      : super(key: key);
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -41,8 +42,6 @@ class _ChatScreenState extends State<ChatScreen> {
     await chatService.createChat(tripId, messageController.text);
     scrollDown();
   }
-
- 
 
   TextEditingController messageController = TextEditingController();
   int dealStatus = 0; // accep:1, decline:-1, nothing:0
@@ -88,6 +87,29 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     Widget avatarImage() {
+      String role;
+      return FutureBuilder<String>(
+          future: userService.getUserRole(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              role = snapshot.data as String;
+              return Image.asset(
+                  
+            role != 'UserRole.guide'
+                ? "assets/images/Saly-11.png"
+                : 
+                  "assets/images/Saly-1.png",
+                  height: 10.h,
+                  width: 10.h,
+                  fit: BoxFit.cover);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          });
+    }
+
+/*
+    Widget avatarImage() {
       return SizedBox(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
@@ -99,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
     }
-
+*/
     Widget userName() {
       Future<UserModel> userModel = userService.getUserById(widget.otherUserId);
       userModel.then((value) {
@@ -124,7 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
         dealStatus = 1;
         setState(() {
           declineButtonColor = Colors.grey;
-          tripService.updateTripDealStatus(widget.tripId, user.currentUser!.uid, true);
+          tripService.updateTripDealStatus(
+              widget.tripId, user.currentUser!.uid, true);
         });
       }
     }
@@ -134,7 +157,8 @@ class _ChatScreenState extends State<ChatScreen> {
         dealStatus = -1;
         setState(() {
           acceptButtonColor = Colors.grey;
-          tripService.updateTripDealStatus(widget.tripId, user.currentUser!.uid, false);
+          tripService.updateTripDealStatus(
+              widget.tripId, user.currentUser!.uid, false);
         });
       }
     }
