@@ -30,6 +30,8 @@ class _GuideSelectScreenState extends State<GuideSelectScreen> {
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
       appBar: AppBar(
+        toolbarHeight: 13.h,
+        leading: const BackButton(color: AppColors.raisinBlack),
         title: Text(
           'Select Your Guide',
           style: TextStyle(fontSize: 21.sp),
