@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guidance/src/models/user_model.dart';
-import 'package:guidance/src/screens/chat_list_screen.dart';
 import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/role_selector_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';

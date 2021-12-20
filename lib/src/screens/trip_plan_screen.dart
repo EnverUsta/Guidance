@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guidance/src/screens/chat_list_screen.dart';
-import 'package:guidance/src/screens/chat_screen.dart';
-import 'package:guidance/src/utils/services/chat_service.dart';
+import 'package:guidance/src/screens/guide_select_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -201,10 +199,15 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
             // * We won't go to any screen anymore here
             // * Therefore, please add the necessary screen here
             Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChatListScreen(),
-                          ),
-                        );
+              MaterialPageRoute(
+                builder: (context) => GuideSelectScreen(
+                  country: country,
+                  city: city,
+                  language: language,
+                  tripDate: tripDateTime,
+                ),
+              ),
+            );
           } else if (tripDateTime == null) {
             showAlert(context, "Empty Field!", "Please select a date");
           }

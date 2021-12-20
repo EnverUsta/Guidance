@@ -6,7 +6,6 @@ import 'package:guidance/src/models/guide_info.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/guide_info_service.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
-import 'package:guidance/src/widgets/text_field_alert_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 Future<GuideInfo> getGuideInfo() async {
@@ -80,7 +79,7 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               child: const Text('Save'),
               onPressed: () async {
                 hobbyCtrl.text.trim();
-                if (!hobbyCtrl.text.isEmpty) {
+                if (hobbyCtrl.text.isNotEmpty) {
                   setState(() {
                     guideInfo.hobbies.add(hobbyCtrl.text);
                   });
@@ -181,7 +180,7 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                   SizedBox(width: 2.w),
                   //Profile name and desc area
 
-                  Container(
+                  SizedBox(
                     // color: Colors.red,
                     width: 43.w,
                     child: Text(
@@ -406,7 +405,7 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                     color: AppColors.fireOpal),
               ),
               editToggle
-                  ? Container(
+                  ? SizedBox(
                       height: 7.h,
                       child: Card(
                         child: IconButton(

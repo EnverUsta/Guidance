@@ -11,8 +11,7 @@ final FirebaseFirestore _firestore = FakeFirebaseFirestore();
 final CollectionReference _mainCollection = _firestore.collection('users');
 final FirebaseAuth _auth = MockFirebaseAuth();
 
-
-class MUserService{
+class MUserService {
   Future<void> createUser(UserModel user) async {
     try {
       DocumentReference documentReferencer = _mainCollection.doc(user.id);
@@ -22,7 +21,7 @@ class MUserService{
       if (user.role == "UserRole.guide") {
         MGuideInfoService gis = MGuideInfoService();
         List<String> hobbies = [];
-        gis.createGuideInfo(user.id, '', hobbies);
+        gis.createGuideInfo(user.name, user.surname, user.id, '', hobbies);
       }
     } catch (e) {
       print('Error in createUser');

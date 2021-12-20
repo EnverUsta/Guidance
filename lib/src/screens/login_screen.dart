@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
-import 'package:guidance/src/screens/chat_list_screen.dart';
-import 'package:guidance/src/screens/guide_profile_screen.dart';
 import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';

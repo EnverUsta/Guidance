@@ -17,7 +17,7 @@ class UserService {
       if (user.role == "UserRole.guide") {
         GuideInfoService gis = GuideInfoService();
         List<String> hobbies = [];
-        gis.createGuideInfo(user.id, '', hobbies);
+        gis.createGuideInfo(user.name, user.surname, user.id, '', hobbies);
       }
     } catch (e) {
       print('Error in createUser');

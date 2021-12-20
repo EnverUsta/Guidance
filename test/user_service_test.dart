@@ -8,22 +8,30 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/test_mocks/mock_user_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:guidance/src/utils/test_mocks/mock_guide_info_service.dart';
-
 
 void main() async {
-    var ts = MUserService();
+  var ts = MUserService();
 
   test("user_service | firebase createUser unit-test", () async {
-    await ts.createUser(UserModel(id: "1", name: "Berke", surname: "Yavas", email: "by@gm", role: "Guide", country: "Finland", city: "Helsinki"));
+    await ts.createUser(UserModel(
+        id: "1",
+        name: "Berke",
+        surname: "Yavas",
+        email: "by@gm",
+        role: "Guide",
+        country: "Finland",
+        city: "Helsinki"));
     var userinfo = await ts.getUserInfo("by@gm");
     expect(userinfo.name, "Berke");
-    await ts.createUser(UserModel(id: "2", name: "Merke", surname: "Favas", email: "mf@gm", role: "Tourist", country: "Minland", city: "Felsinki"));
+    await ts.createUser(UserModel(
+        id: "2",
+        name: "Merke",
+        surname: "Favas",
+        email: "mf@gm",
+        role: "Tourist",
+        country: "Minland",
+        city: "Felsinki"));
   });
-  
 
   test('user_service | firebase getUsers unit-test', () async {
     var user = await ts.getUsers();
@@ -42,5 +50,5 @@ void main() async {
     expect("Berke", user.name);
   });
 
-  var guideservice = MGuideInfoService();
+  // var guideservice = MGuideInfoService();
 }

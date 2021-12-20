@@ -94,11 +94,9 @@ class _ChatScreenState extends State<ChatScreen> {
             if (snapshot.hasData) {
               role = snapshot.data as String;
               return Image.asset(
-                  
-            role != 'UserRole.guide'
-                ? "assets/images/Saly-11.png"
-                : 
-                  "assets/images/Saly-1.png",
+                  role != 'UserRole.guide'
+                      ? "assets/images/Saly-11.png"
+                      : "assets/images/Saly-1.png",
                   height: 10.h,
                   width: 10.h,
                   fit: BoxFit.cover);
@@ -263,16 +261,14 @@ class _ChatScreenState extends State<ChatScreen> {
             final chatDocs = chatSnapshot.data.docs as List;
             chatDocs.sort((a, b) => a['ctime'].compareTo(b['ctime']));
 
-            return Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return MessageField(
-                      message: chatDocs[index]['message'].toString(),
-                      sendByMe:
-                          user.currentUser!.uid == chatDocs[index]['userId']);
-                },
-                itemCount: chatDocs.length,
-              ),
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return MessageField(
+                    message: chatDocs[index]['message'].toString(),
+                    sendByMe:
+                        user.currentUser!.uid == chatDocs[index]['userId']);
+              },
+              itemCount: chatDocs.length,
             );
           },
         ),

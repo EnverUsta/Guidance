@@ -10,11 +10,15 @@ final CollectionReference _mainCollection = _firestore.collection('guideInfos');
 final FirebaseAuth _auth = MockFirebaseAuth();
 
 class MGuideInfoService {
-  Future<void> createGuideInfo(
-      String userId, String intro, List<String> hobbies) async {
+  Future<void> createGuideInfo(String name, String surname, String userId,
+      String intro, List<String> hobbies) async {
     try {
-      GuideInfo guideInfo =
-          GuideInfo(userId: userId, introducion: intro, hobbies: hobbies);
+      GuideInfo guideInfo = GuideInfo(
+          name: name,
+          surname: surname,
+          userId: userId,
+          introducion: intro,
+          hobbies: hobbies);
       DocumentReference documentReferencer =
           _mainCollection.doc(guideInfo.userId);
       Map<String, dynamic> data = guideInfo.toJson();

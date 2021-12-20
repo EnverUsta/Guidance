@@ -7,11 +7,16 @@ final CollectionReference _mainCollection = _firestore.collection('guideInfos');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class GuideInfoService {
-  Future<void> createGuideInfo(
-      String userId, String intro, List<String> hobbies) async {
+  Future<void> createGuideInfo(String name, String surname, String userId,
+      String intro, List<String> hobbies) async {
     try {
-      GuideInfo guideInfo =
-          GuideInfo(userId: userId, introducion: intro, hobbies: hobbies);
+      GuideInfo guideInfo = GuideInfo(
+        name: name,
+        surname: surname,
+        userId: userId,
+        introducion: intro,
+        hobbies: hobbies,
+      );
       DocumentReference documentReferencer =
           _mainCollection.doc(guideInfo.userId);
       Map<String, dynamic> data = guideInfo.toJson();
@@ -32,15 +37,19 @@ class GuideInfoService {
     }
   }
 
-  Future<List<GuideInfo>> getGuideInfos() async {
+  Future<Iterable<GuideInfo>> getGuideInfos() async {
     QuerySnapshot<Map<String, dynamic>> data =
         await _firestore.collection('guideInfos').get();
 
-    List<GuideInfo> guideInfos = [];
-    data.docs.forEach((element) {
-      guideInfos.add(GuideInfo.fromJson(element.data()));
-    });
-    return guideInfos;
+    return data.docs.map((doc) => GuideInfo.fromJson(doc.data()));
+
+    // return snapshot.docs.map(doc => doc.data());
+
+    // List<GuideInfo> guideInfos = [];
+    // for (var element in data.docs) {
+    //   guideInfos.add(GuideInfo.fromJson(element.data()));
+    // }
+    // return guideInfos;
   }
 
   Future<void> deleteGuideInfo(String userId) async {
