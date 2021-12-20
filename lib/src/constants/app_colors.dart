@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color mainBackgroundColor = Color.fromRGBO(248, 248, 248, 1.0);
+  static const Color lighterBackgroundColor =
+      Color.fromRGBO(255, 255, 254, 1.0); //for cards
   static const Color raisinBlack = Color.fromRGBO(36, 33, 36, 1.0);
   static const Color raisinBlackLight = Color.fromRGBO(36, 33, 36, 0.5);
   static const Color fireOpal = Color.fromRGBO(242, 92, 84, 1.0); //red like

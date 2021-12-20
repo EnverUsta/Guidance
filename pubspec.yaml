@@ -75,6 +75,8 @@ flutter:
     # - assets/images/Saly-1.svg
     - assets/images/
     # - assets/images/Saly-11.svg
+    # - assets/images/Saly-portrait.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
