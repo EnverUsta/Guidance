@@ -91,7 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintText: 'Mail',
                       ),
                       onChanged: (value) {
-                        email = value;
+                        email = value.trim();
                       },
                       validator: (value) {},
                     ),

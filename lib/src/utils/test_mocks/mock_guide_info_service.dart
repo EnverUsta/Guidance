@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:guidance/src/models/guide_info.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseFirestore _firestore = FakeFirebaseFirestore();
 final CollectionReference _mainCollection = _firestore.collection('guideInfos');
-final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseAuth _auth = MockFirebaseAuth();
 
-class GuideInfoService {
+class MGuideInfoService {
   Future<void> createGuideInfo(
       String userId, String intro, List<String> hobbies) async {
     try {
@@ -22,7 +25,7 @@ class GuideInfoService {
   }
 
   Future<GuideInfo> getGuideInfo(String id) async {
-    var collection = FirebaseFirestore.instance.collection('guideInfos');
+    var collection = _firestore.collection('guideInfos');
     var docSnapshot = await collection.doc(id).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
@@ -45,7 +48,7 @@ class GuideInfoService {
 
   Future<void> deleteGuideInfo(String userId) async {
     try {
-      var collection = FirebaseFirestore.instance.collection('guideInfos');
+      var collection = _firestore.collection('guideInfos');
       await collection.doc(userId).delete();
     } catch (e) {
       rethrow;
@@ -55,7 +58,7 @@ class GuideInfoService {
   Future<void> updateGuideInfo(
       String userId, String newintro, List<String> newhobbies) async {
     try {
-      FirebaseFirestore.instance
+      FakeFirebaseFirestore()
           .collection('guideInfos')
           .doc(_auth.currentUser!.uid)
           .update({'introducion': newintro, 'hobbies': newhobbies});

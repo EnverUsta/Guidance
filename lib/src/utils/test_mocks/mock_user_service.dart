@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:guidance/src/models/user_model.dart';
-import 'package:guidance/src/utils/services/guide_info_service.dart';
+import 'package:guidance/src/utils/test_mocks/mock_guide_info_service.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseFirestore _firestore = FakeFirebaseFirestore();
 final CollectionReference _mainCollection = _firestore.collection('users');
-final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseAuth _auth = MockFirebaseAuth();
 
-class UserService {
+
+class MUserService{
   Future<void> createUser(UserModel user) async {
     try {
       DocumentReference documentReferencer = _mainCollection.doc(user.id);
@@ -15,7 +20,7 @@ class UserService {
       await documentReferencer.set(data);
 
       if (user.role == "UserRole.guide") {
-        GuideInfoService gis = GuideInfoService();
+        MGuideInfoService gis = MGuideInfoService();
         List<String> hobbies = [];
         gis.createGuideInfo(user.id, '', hobbies);
       }
@@ -40,7 +45,7 @@ class UserService {
   }
 
   Future<UserModel> getUserById(String? id) async {
-    var collection = FirebaseFirestore.instance.collection('users');
+    var collection = FakeFirebaseFirestore().collection('users');
     var docSnapshot = await collection.doc(id).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
@@ -64,7 +69,7 @@ class UserService {
   Future<List<UserModel>> getGuides(String city) async {
     QuerySnapshot<Map<String, dynamic>> data = await _firestore
         .collection('users')
-        .where('role', isEqualTo: 'UserRole.guide')
+        .where('role', isEqualTo: "Guide")
         .where('city', isEqualTo: city)
         .get();
 
@@ -76,7 +81,7 @@ class UserService {
   }
 
   Future<String> getUserRole() async {
-    var collection = FirebaseFirestore.instance.collection('users');
+    var collection = FakeFirebaseFirestore().collection('users');
     var docSnapshot = await collection.doc(_auth.currentUser!.uid).get();
     try {
       Map<String, dynamic>? data = docSnapshot.data();

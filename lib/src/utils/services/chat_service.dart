@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guidance/src/models/chat.dart';
+import 'package:guidance/src/utils/services/trip_service.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-final CollectionReference _mainCollection = _firestore.collection('chats');
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final TripService tripService = TripService();
 
 class ChatService {
   Future<void> createChat(String tripId, String message) async {
@@ -16,6 +17,9 @@ class ChatService {
         ctime: DateTime.now(),
       );
       FirebaseFirestore.instance.collection("chats").add(chat.toJson());
+
+      //Update Trip
+      tripService.updateLastMessageofTrip(tripId, message, chat.ctime);
     } catch (e) {
       print('Error in createChat');
     }
