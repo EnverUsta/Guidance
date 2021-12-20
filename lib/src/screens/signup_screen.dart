@@ -19,8 +19,9 @@ class _SignupScreenState extends State<SignupScreen> {
   String surname = "";
   String email = "";
   String password = "";
-  String country = "";
-  String city = "";
+  String? country;
+  String? city;
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,15 +143,28 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.w, vertical: 1.h),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Country',
+                          child: DropdownButtonFormField<String>(
+                            value: country,
+                            hint: const Text(
+                              "Country",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
                             ),
-                            onChanged: (value) {
-                              country = value;
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            iconSize: 3.5.h,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                country = newValue!;
+                              });
                             },
-                            validator: (value) {},
+                            items: <String>['Turkey']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                           ),
                         ),
                       ),
@@ -165,15 +179,28 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.w, vertical: 1.h),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'City',
+                          child: DropdownButtonFormField<String>(
+                            value: city,
+                            hint: const Text(
+                              "City",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
                             ),
-                            onChanged: (value) {
-                              city = value;
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            iconSize: 3.5.h,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                city = newValue!;
+                              });
                             },
-                            validator: (value) {},
+                            items: <String>['Istanbul']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                           ),
                         ),
                       ),
@@ -195,8 +222,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 name,
                                 surname,
                                 widget.userRole,
-                                country,
-                                city);
+                                country!,
+                                city!);
                             setState(() {
                               isLoading = false;
                             });

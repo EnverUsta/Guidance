@@ -113,4 +113,5 @@ class TripService {
       return dS?['touristAcceptance'];
     }
   }
+
 }
