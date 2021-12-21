@@ -12,7 +12,7 @@ import 'package:guidance/src/utils/test_mocks/mock_user_service.dart';
 void main() async {
   var ts = MUserService();
 
-  test("user_service | firebase createUser unit-test", () async {
+  test("user_service | tests if user service be able to create user", () async {
     await ts.createUser(UserModel(
         id: "1",
         name: "Berke",

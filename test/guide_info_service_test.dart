@@ -11,7 +11,7 @@ import 'package:guidance/src/utils/test_mocks/mock_guide_info_service.dart';
 void main() async {
   var guideservice = MGuideInfoService();
 
-  test('guide_info_service | createGuideInfo & getGuideInfo unit-test',
+  test('guide_info_service | createGuideInfo & getGuideInfo tests if Guide Service be able to create info for guide and be able to retrieve Guide info by id',
       () async {
     await guideservice
         .createGuideInfo("ahmet", "demir", "1", "Student", ["Develop", "Test"]);
