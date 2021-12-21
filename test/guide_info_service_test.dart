@@ -21,12 +21,12 @@ void main() async {
         .createGuideInfo("enver", "usta", "2", "Student", ["Develop", "Test"]);
   });
 
-  test('guide_info_service | getGuideInfos unit-test', () async {
+  test('guide_info_service | getGuideInfos tests if Guide Service be able to query all guide infos', () async {
     var users = await guideservice.getGuideInfos();
     expect(users.length, 2);
   });
 
-  test('guide_info_service | deleteGuideInfo unit-test', () async {
+  test('guide_info_service | deleteGuideInfo tests if guide service be able to delete guide by id', () async {
     await guideservice.deleteGuideInfo("1");
     var users = await guideservice.getGuideInfos();
     expect(users.length, 1);

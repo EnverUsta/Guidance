@@ -33,19 +33,19 @@ void main() async {
         city: "Felsinki"));
   });
 
-  test('user_service | firebase getUsers unit-test', () async {
+  test('user_service | tests if user service be able to retrieve all users', () async {
     var user = await ts.getUsers();
     expect(user.length, 2);
     expect(user.elementAt(0).name, "Berke");
     expect(user.elementAt(1).name, "Merke");
   });
 
-  test('user_service | firebase getGuides unit-test', () async {
+  test('user_service | tests if user service be able to get guides available by city', () async {
     var user = await ts.getGuides("Helsinki");
     expect(1, user.length);
   });
 
-  test('user_service | firebase getUserInfo unit-test', () async {
+  test('user_service | tests if service be able to get user info by mail address', () async {
     var user = await ts.getUserInfo("by@gm");
     expect("Berke", user.name);
   });
