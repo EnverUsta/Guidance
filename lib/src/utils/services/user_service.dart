@@ -31,8 +31,6 @@ class UserService {
         .get();
 
     return UserModel.fromJson(data.docs.single.data());
-
-    // commt by mehmet yazıcı ;)
   }
 
   Future<String> getUserId() async {
@@ -55,9 +53,9 @@ class UserService {
         await _firestore.collection('users').get();
 
     List<UserModel> users = [];
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       users.add(UserModel.fromJson(element.data()));
-    });
+    }
     return users;
   }
 
@@ -69,9 +67,9 @@ class UserService {
         .get();
 
     List<UserModel> users = [];
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       users.add(UserModel.fromJson(element.data()));
-    });
+    }
     return users;
   }
 
