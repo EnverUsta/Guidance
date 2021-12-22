@@ -43,13 +43,13 @@ class AuthService {
   Future<bool?> signInWithEmailAndPassword(
       String email, String password, UserRole role) async {
     try {
-      UserCredential response = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
       UserModel um = await userService.getUserInfo(email);
 
       return um.role == role.toString() ? true : false;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       rethrow;
     }
   }

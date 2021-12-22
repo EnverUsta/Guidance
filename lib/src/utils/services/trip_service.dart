@@ -5,7 +5,6 @@ import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-final CollectionReference _mainCollection = _firestore.collection('trips');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final UserService userService = UserService();
 

@@ -5,7 +5,6 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/test_mocks/mock_guide_info_service.dart';
-import 'package:guidance/src/models/enum/user_role.dart';
 
 final FirebaseFirestore _firestore = FakeFirebaseFirestore();
 final CollectionReference _mainCollection = _firestore.collection('users');
@@ -23,8 +22,7 @@ class MUserService {
         List<String> hobbies = [];
         gis.createGuideInfo(user.name, user.surname, user.id, '', hobbies);
       }
-    } catch (e) {
-      print('Error in createUser');
+    } catch (_) {
     }
   }
 
@@ -59,9 +57,9 @@ class MUserService {
         await _firestore.collection('users').get();
 
     List<UserModel> users = [];
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       users.add(UserModel.fromJson(element.data()));
-    });
+    }
     return users;
   }
 
@@ -73,9 +71,9 @@ class MUserService {
         .get();
 
     List<UserModel> users = [];
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       users.add(UserModel.fromJson(element.data()));
-    });
+    }
     return users;
   }
 
