@@ -17,6 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   final authService = AuthService();
   bool isLoading = false;
 
@@ -41,14 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: TextFormField(
+                      controller: _emailController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {
-                        email = value.trim();
+                      validator: (value) {
+                        return null;
                       },
-                      validator: (value) {},
                     ),
                   ),
                 ),
@@ -63,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: TextFormField(
+                      controller: _passwordController,
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
@@ -70,9 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {
-                        password = value;
-                      },
                       validator: (value) {},
                     ),
                   ),
@@ -88,13 +89,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      final result =
-                          await authService.signInWithEmailAndPassword(
-                              email, password, widget.userRole);
-                      if (result != null && result) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                      try {
+                        final result =
+                            await authService.signInWithEmailAndPassword(
+                                _emailController.text,
+                                _passwordController.text,
+                                widget.userRole);
+                        if (result != null && result) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: const Text('An error occured'),
+                            action:
+                                SnackBarAction(label: 'Undo', onPressed: () {}),
                           ),
                         );
                       }

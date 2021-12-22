@@ -48,23 +48,9 @@ class AuthService {
 
       UserModel um = await userService.getUserInfo(email);
 
-      /*
-      List<UserModel> users = await userService.getGuides("istanbul");
-      users.forEach((user) {
-        print(user.id);
-        print(user.email);
-        print(user.name);
-        print(user.role);
-      });
-      */
-
       return um.role == role.toString() ? true : false;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
+      rethrow;
     }
   }
 
