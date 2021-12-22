@@ -117,7 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'This field shouldn\'t be empty';
-                              } else if (Validator.validateEmail(value)) {
+                              } else if (!Validator.validateEmail(value)) {
                                 return 'Please provide a correct email';
                               } else {
                                 return null;
