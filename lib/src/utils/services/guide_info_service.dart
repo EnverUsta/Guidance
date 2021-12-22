@@ -42,14 +42,6 @@ class GuideInfoService {
         await _firestore.collection('guideInfos').get();
 
     return data.docs.map((doc) => GuideInfo.fromJson(doc.data()));
-
-    // return snapshot.docs.map(doc => doc.data());
-
-    // List<GuideInfo> guideInfos = [];
-    // for (var element in data.docs) {
-    //   guideInfos.add(GuideInfo.fromJson(element.data()));
-    // }
-    // return guideInfos;
   }
 
   Future<void> deleteGuideInfo(String userId) async {

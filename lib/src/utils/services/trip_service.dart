@@ -39,7 +39,7 @@ class TripService {
           .doc(result.id)
           .update(trip.toJson());
     } catch (e) {
-      print('Error in createTrip');
+      rethrow;
     }
   }
 
@@ -113,5 +113,4 @@ class TripService {
       return dS?['touristAcceptance'];
     }
   }
-
 }

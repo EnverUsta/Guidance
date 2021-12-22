@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
+import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/guide_info.dart';
 import 'package:guidance/src/models/user_model.dart';
 import 'package:guidance/src/utils/services/guide_info_service.dart';
+import 'package:guidance/src/utils/services/trip_service.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,7 +34,8 @@ updateGuideInfo(String newIntro, List<String> newhobbies) async {
 }
 
 class GuideProfileScreen extends StatefulWidget {
-  const GuideProfileScreen({Key? key}) : super(key: key);
+  final GuideInfo? guideInfo;
+  const GuideProfileScreen({Key? key, this.guideInfo}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -45,6 +48,7 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
   GuideInfoService guideInfoService = GuideInfoService();
   String currentUserId = FirebaseAuth.instance.currentUser!.uid;
   TextEditingController introductionController = TextEditingController();
+  UserRole userRole = UserRole.guide;
 
   Future<void> _showMyDialog(GuideInfo guideInfo) async {
     TextEditingController hobbyCtrl = TextEditingController();
@@ -97,10 +101,15 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.guideInfo != null) {
+      userRole = UserRole.tourist;
+    }
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
       body: FutureBuilder<GuideInfo>(
-        future: guideInfoService.getGuideInfo(currentUserId),
+        future: guideInfoService.getGuideInfo(userRole == UserRole.guide
+            ? currentUserId
+            : widget.guideInfo!.userId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final guide = snapshot.data!;
@@ -119,6 +128,10 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                   ),
                   _buildHobbiesText(guide),
                   _buildHobbyItems(guide.hobbies),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  if (userRole == UserRole.tourist) _buildRequestButton(),
                 ],
               ),
             );
@@ -128,6 +141,27 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
             );
           }
         },
+      ),
+    );
+  }
+
+  SizedBox _buildRequestButton() {
+    TripService tripService = TripService();
+    return SizedBox(
+      height: 7.h,
+      child: ElevatedButton(
+        onPressed: () {},
+        child: const Text('Request'),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            const Color(0xFF7AAC5D),
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -192,42 +226,43 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
           //Using container for responsive widget (sizer package usage)
           // SizedBox(width: 2.w),
           //Edit button
-          Container(
-            height: 6.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.4),
-                  spreadRadius: 1.5,
-                  blurRadius: 2,
-                  offset: const Offset(1, 3), // changes position of shadow
+          if (userRole == UserRole.guide)
+            Container(
+              height: 6.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.4),
+                    spreadRadius: 1.5,
+                    blurRadius: 2,
+                    offset: const Offset(1, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Center(
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (editToggle) {
+                        updateGuideInfo(
+                          introductionController.text,
+                          guideInfo.hobbies,
+                        );
+                      }
+                      editToggle = !editToggle;
+                    });
+                  },
+                  icon: (editToggle)
+                      ? const Icon(Icons.save_outlined,
+                          color: AppColors.raisinBlack)
+                      : const Icon(Icons.drive_file_rename_outline_outlined,
+                          color: AppColors
+                              .raisinBlack), //edit toggle?show this: show that
                 ),
-              ],
-            ),
-            child: Center(
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (editToggle) {
-                      updateGuideInfo(
-                        introductionController.text,
-                        guideInfo.hobbies,
-                      );
-                    }
-                    editToggle = !editToggle;
-                  });
-                },
-                icon: (editToggle)
-                    ? const Icon(Icons.save_outlined,
-                        color: AppColors.raisinBlack)
-                    : const Icon(Icons.drive_file_rename_outline_outlined,
-                        color: AppColors
-                            .raisinBlack), //edit toggle?show this: show that
               ),
             ),
-          ),
           //End of Edit button
         ],
       ),

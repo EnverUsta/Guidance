@@ -201,10 +201,10 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => GuideSelectScreen(
-                  country: country,
-                  city: city,
-                  language: language,
-                  tripDate: tripDateTime,
+                  country: country as String,
+                  city: city as String,
+                  language: language as String,
+                  tripDate: tripDateTime as DateTime,
                 ),
               ),
             );
