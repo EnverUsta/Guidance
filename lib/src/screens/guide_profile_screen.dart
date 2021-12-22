@@ -114,57 +114,6 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
     }
     return Scaffold(
       backgroundColor: AppColors.mainBackgroundColor,
-<<<<<<< HEAD
-      body: Stack(children: [
-        FutureBuilder<GuideInfo>(
-          future: guideInfoService.getGuideInfo(userRole == UserRole.guide
-              ? currentUserId
-              : widget.guideInfo!.userId),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final guide = snapshot.data!;
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                child: ListView(
-                  children: <Widget>[
-                    if (userRole == UserRole.tourist)
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: IconButton(
-                            padding: EdgeInsets.zero,
-                            iconSize: 9.0.w,
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ),
-                    _buildProfileText(),
-                    _buildProfileImageRow(guide),
-                    SizedBox(
-                      height: 2.5.h,
-                    ),
-                    _buildIntroduction(
-                      guide.introducion,
-                      introductionController,
-                    ),
-                    _buildHobbiesText(guide),
-                    _buildHobbyItems(guide.hobbies),
-                    SizedBox(
-                      height: 4.h,
-                    ),
-                    if (userRole == UserRole.tourist) _buildRequestButton(),
-                  ],
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      ]),
-=======
       body: FutureBuilder<GuideInfo>(
         future: guideInfoService.getGuideInfo(userRole == UserRole.guide
             ? currentUserId
@@ -176,6 +125,17 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
               child: ListView(
                 children: <Widget>[
+                  if (userRole == UserRole.tourist)
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          iconSize: 9.0.w,
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ),
                   _buildProfileText(),
                   _buildProfileImageRow(guide),
                   SizedBox(
@@ -219,9 +179,6 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                                       );
                                       await tripService
                                           .doesTripExist(guide.userId);
-                                      setState(() {
-                                        isLoading = false;
-                                      });
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
@@ -267,7 +224,6 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
           }
         },
       ),
->>>>>>> a4c28f772f19ae26d293b1e9a8bb62551dc096d0
     );
   }
 
