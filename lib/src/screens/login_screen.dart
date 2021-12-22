@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Form(
         key: _formKey,
+        // autovalidateMode: AutovalidateMode.disabled,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(3.h),
@@ -50,7 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Mail',
                       ),
                       validator: (value) {
-                        return null;
+                        if (value!.isEmpty) {
+                          return 'This field shouldn\'t be empty';
+                        } else if (!value.contains('@')) {
+                          return 'Please provide correct email';
+                        } else {
+                          return null;
+                        }
                       },
                     ),
                   ),
@@ -74,7 +81,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      validator: (value) {},
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'This field shouldn\'t be empty';
+                        } else if (value.length < 6) {
+                          return 'Password length should be longer than 6 characters';
+                        } else if (value.length >= 20) {
+                          return 'Password length should be less than 20 characters';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -86,35 +103,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 6.h,
                   child: ElevatedButton(
                     onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      try {
-                        final result =
-                            await authService.signInWithEmailAndPassword(
-                                _emailController.text,
-                                _passwordController.text,
-                                widget.userRole);
-                        if (result != null && result) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          final result =
+                              await authService.signInWithEmailAndPassword(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  widget.userRole);
+                          if (result != null && result) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: const Text('An error occured'),
+                              action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {},
+                                  textColor: Colors.white),
                             ),
                           );
                         }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red,
-                            content: const Text('An error occured'),
-                            action:
-                                SnackBarAction(label: 'Undo', onPressed: () {}),
-                          ),
-                        );
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
-                      setState(() {
-                        isLoading = false;
-                      });
                     },
                     child: isLoading
                         ? const CircularProgressIndicator()
