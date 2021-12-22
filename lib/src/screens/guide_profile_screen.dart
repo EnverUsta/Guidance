@@ -149,96 +149,89 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
   }
 
   Widget _buildProfileImageRow(GuideInfo guideInfo) {
-    return FutureBuilder<UserModel>(
-        future: UserService().getUserById(currentUserId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h, right: 2.h),
-              width: double.infinity,
-              height: 18.h,
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  //Profile image area
-                  Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.asset(
-                      "assets/images/Saly-11.png",
-                      //"https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
-                      height: 25.w,
-                      width: 25.w,
-                      fit: BoxFit.cover,
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  //End of Profile image area
-                  //Using container for responsive widget (sizer package usage)
-                  SizedBox(width: 2.w),
-                  //Profile name and desc area
+    return Container(
+      margin: EdgeInsets.only(top: 0.5.h, bottom: 2.h, right: 2.h),
+      width: double.infinity,
+      height: 18.h,
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          //Profile image area
+          Card(
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Image.asset(
+              "assets/images/Saly-11.png",
+              //"https://avatars0.githubusercontent.com/u/28812093?s=460&u=06471c90e03cfd8ce2855d217d157c93060da490&v=4",
+              height: 25.w,
+              width: 25.w,
+              fit: BoxFit.cover,
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          //End of Profile image area
+          //Using container for responsive widget (sizer package usage)
+          SizedBox(width: 2.w),
+          //Profile name and desc area
 
-                  SizedBox(
-                    // color: Colors.red,
-                    width: 43.w,
-                    child: Text(
-                      snapshot.data!.name + " " + snapshot.data!.surname,
-                      style: GoogleFonts.nunito(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.raisinBlack),
-                    ),
-                  ),
+          SizedBox(
+            // color: Colors.red,
+            width: 43.w,
+            child: Text(
+              guideInfo.name + " " + guideInfo.surname,
+              style: GoogleFonts.nunito(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.raisinBlack),
+            ),
+          ),
 
-                  //End of Profile name end desc area
-                  //Using container for responsive widget (sizer package usage)
-                  // SizedBox(width: 2.w),
-                  //Edit button
-                  Container(
-                    height: 6.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (editToggle) {
-                              updateGuideInfo(
-                                introductionController.text,
-                                guideInfo.hobbies,
-                              );
-                            }
-                            editToggle = !editToggle;
-                          });
-                        },
-                        icon: const Icon(
-                            Icons.drive_file_rename_outline_outlined),
-                      ),
-                    ),
-                  ),
-                  //End of Edit button
-                ],
+          //End of Profile name end desc area
+          //Using container for responsive widget (sizer package usage)
+          // SizedBox(width: 2.w),
+          //Edit button
+          Container(
+            height: 6.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 1.5,
+                  blurRadius: 2,
+                  offset: const Offset(1, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Center(
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    if (editToggle) {
+                      updateGuideInfo(
+                        introductionController.text,
+                        guideInfo.hobbies,
+                      );
+                    }
+                    editToggle = !editToggle;
+                  });
+                },
+                icon: (editToggle)
+                    ? const Icon(Icons.save_outlined,
+                        color: AppColors.raisinBlack)
+                    : const Icon(Icons.drive_file_rename_outline_outlined,
+                        color: AppColors
+                            .raisinBlack), //edit toggle?show this: show that
               ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+            ),
+          ),
+          //End of Edit button
+        ],
+      ),
+    );
   }
 
   Widget _buildIntroduction(
