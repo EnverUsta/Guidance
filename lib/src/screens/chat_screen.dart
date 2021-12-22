@@ -52,8 +52,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Timer(const Duration(milliseconds: 400), () => scrollDown());
-
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -251,6 +249,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: StreamBuilder(
           stream: chatService.chatStream(widget.tripId),
           builder: (BuildContext ctx, AsyncSnapshot chatSnapshot) {
+            Timer(const Duration(milliseconds: 400), () => scrollDown());
             //just add this line
             if (chatSnapshot.data == null) {
               return const Center(

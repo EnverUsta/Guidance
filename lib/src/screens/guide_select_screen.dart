@@ -80,6 +80,9 @@ class _GuideSelectScreenState extends State<GuideSelectScreen> {
           MaterialPageRoute(
             builder: (BuildContext context) => GuideProfileScreen(
               guideInfo: guideItem,
+              goalDate: tripDate,
+              country: country,
+              city: city,
             ),
           ),
         );
