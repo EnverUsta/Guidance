@@ -17,6 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   final authService = AuthService();
   bool isLoading = false;
 
@@ -28,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Form(
         key: _formKey,
+        // autovalidateMode: AutovalidateMode.disabled,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(3.h),
@@ -41,14 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: TextFormField(
+                      controller: _emailController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Mail',
                       ),
-                      onChanged: (value) {
-                        email = value.trim();
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'This field shouldn\'t be empty';
+                        } else if (!value.contains('@')) {
+                          return 'Please provide a correct email';
+                        } else {
+                          return null;
+                        }
                       },
-                      validator: (value) {},
                     ),
                   ),
                 ),
@@ -63,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                     child: TextFormField(
+                      controller: _passwordController,
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
@@ -70,10 +81,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
-                      onChanged: (value) {
-                        password = value;
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'This field shouldn\'t be empty';
+                        } else if (value.length < 6) {
+                          return 'Password length should be longer than 6 characters';
+                        } else if (value.length >= 20) {
+                          return 'Password length should be less than 20 characters';
+                        } else {
+                          return null;
+                        }
                       },
-                      validator: (value) {},
                     ),
                   ),
                 ),
@@ -85,22 +103,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 6.h,
                   child: ElevatedButton(
                     onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      final result =
-                          await authService.signInWithEmailAndPassword(
-                              email, password, widget.userRole);
-                      if (result != null && result) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          final result =
+                              await authService.signInWithEmailAndPassword(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  widget.userRole);
+                          if (result != null && result) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: const Text('An error occured'),
+                              action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {},
+                                  textColor: Colors.white),
+                            ),
+                          );
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
                       }
-                      setState(() {
-                        isLoading = false;
-                      });
                     },
                     child: isLoading
                         ? const CircularProgressIndicator()

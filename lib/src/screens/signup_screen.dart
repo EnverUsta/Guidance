@@ -22,7 +22,6 @@ class _SignupScreenState extends State<SignupScreen> {
   String? country;
   String? city;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +55,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             onChanged: (value) {
                               name = value;
                             },
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'this field shouldn\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -79,7 +84,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             onChanged: (value) {
                               surname = value;
                             },
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'this field shouldn\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -102,7 +113,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             onChanged: (value) {
                               email = value.trim();
                             },
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'This field shouldn\'t be empty';
+                              } else if (!value.contains('@')) {
+                                return 'Please provide a correct email';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -128,7 +147,17 @@ class _SignupScreenState extends State<SignupScreen> {
                             onChanged: (value) {
                               password = value;
                             },
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'This field shouldn\'t be empty';
+                              } else if (value.length < 6) {
+                                return 'Password length should be longer than 6 characters';
+                              } else if (value.length >= 20) {
+                                return 'Password length should be less than 20 characters';
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -145,6 +174,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               horizontal: 5.w, vertical: 1.h),
                           child: DropdownButtonFormField<String>(
                             value: country,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'This field shouldn\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
                             hint: const Text(
                               "Country",
                               style: TextStyle(
@@ -181,6 +217,13 @@ class _SignupScreenState extends State<SignupScreen> {
                               horizontal: 5.w, vertical: 1.h),
                           child: DropdownButtonFormField<String>(
                             value: city,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'This field shouldn\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
                             hint: const Text(
                               "City",
                               style: TextStyle(
@@ -212,22 +255,37 @@ class _SignupScreenState extends State<SignupScreen> {
                         height: 6.h,
                         child: ElevatedButton(
                           onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            final auth = AuthService();
-                            await auth.registerWithEmailAndPassword(
-                                email,
-                                password,
-                                name,
-                                surname,
-                                widget.userRole,
-                                country!,
-                                city!);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.of(context).pop();
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              final auth = AuthService();
+                              try {
+                                await auth.registerWithEmailAndPassword(
+                                    email,
+                                    password,
+                                    name,
+                                    surname,
+                                    widget.userRole,
+                                    country!,
+                                    city!);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: const Text('An error occured'),
+                                    action: SnackBarAction(
+                                        label: 'Undo',
+                                        onPressed: () {},
+                                        textColor: Colors.white),
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                              Navigator.of(context).pop();
+                            }
                           },
                           child: const Text(
                             'Signup',
