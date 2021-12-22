@@ -103,7 +103,17 @@ Widget _buildGuideListCard(
                   SizedBox(
                     height: 2.h,
                   ),
-                  SizedBox(width: 50.w, child: Text(guideItem.introducion)),
+                  SizedBox(
+                    width: 50.w,
+                    child: Text(
+                      guideItem.introducion.substring(
+                        0,
+                        (guideItem.introducion.length < 60
+                            ? guideItem.introducion.length
+                            : 60),
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],
