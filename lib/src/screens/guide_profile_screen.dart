@@ -353,29 +353,27 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
       child: Padding(
         padding: EdgeInsets.all(1.5.h),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             //INTRODUCTION Title
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Introduction",
-                style: GoogleFonts.nunito(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.fireOpal),
-              ),
+            Text(
+              "Introduction",
+              style: GoogleFonts.nunito(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.fireOpal),
             ),
             //INTRODUCTION Content
             if (editToggle)
               Padding(
-                padding: EdgeInsets.only(top: 1.h),
+                padding: EdgeInsets.only(top: 1.h, left: 2.w),
                 child: TextField(
                   controller: introductionController,
                 ),
               )
             else
               Padding(
-                  padding: EdgeInsets.only(top: 1.h),
+                  padding: EdgeInsets.only(top: 1.h, left: 2.w),
                   child: Text(introductionController.text)),
           ],
         ),
