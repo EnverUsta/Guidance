@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value!.isEmpty) {
                           return 'This field shouldn\'t be empty';
                         } else if (!value.contains('@')) {
-                          return 'Please provide correct email';
+                          return 'Please provide a correct email';
                         } else {
                           return null;
                         }
