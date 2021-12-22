@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/screens/home_screen.dart';
 import 'package:guidance/src/screens/signup_screen.dart';
+import 'package:guidance/src/utils/helpers/validator.dart';
 import 'package:guidance/src/utils/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'This field shouldn\'t be empty';
-                        } else if (!value.contains('@')) {
+                        } else if (!Validator.validateEmail(value)) {
                           return 'Please provide a correct email';
                         } else {
                           return null;
