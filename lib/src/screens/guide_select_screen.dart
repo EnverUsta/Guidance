@@ -14,7 +14,6 @@ class GuideSelectScreen extends StatefulWidget {
   final language;
   final tripDate;
 
-
   const GuideSelectScreen(
       {Key? key, this.country, this.city, this.language, this.tripDate})
       : super(key: key);
@@ -56,7 +55,8 @@ Widget _buildGuideList(DateTime tripDate, String country, String city) {
         return ListView.builder(
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
-            return _buildGuideListCard(snapshot.data!.elementAt(index), tripDate, country, city);
+            return _buildGuideListCard(
+                snapshot.data!.elementAt(index), tripDate, country, city);
           },
         );
       } else {
@@ -68,14 +68,12 @@ Widget _buildGuideList(DateTime tripDate, String country, String city) {
   );
 }
 
-Widget _buildGuideListCard (GuideInfo guideItem,DateTime tripDate, String country, String city) {
-  final guideInfoService = GuideInfoService();
-  final tripService = TripService();
+Widget _buildGuideListCard(
+    GuideInfo guideItem, DateTime tripDate, String country, String city) {
   return GestureDetector(
     onTap: () {
       debugPrint('Card tapped.');
       //await tripService.createTrip(guideItem.userId, tripDate,country, city);
-      
     },
     child: Container(
       margin: EdgeInsets.symmetric(vertical: 0.2.h),
@@ -99,57 +97,13 @@ Widget _buildGuideListCard (GuideInfo guideItem,DateTime tripDate, String countr
                     guideItem.name + ' ' + guideItem.surname,
                     style: TextStyle(
                         color: AppColors.fireOpal,
-                        fontSize: 17.sp,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
                     height: 2.h,
                   ),
                   SizedBox(width: 50.w, child: Text(guideItem.introducion)),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  SizedBox(
-                    height: 4.5.h,
-                    width: 51.w,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      key: Key(guideItem.hobbies.length.toString()),
-                      itemCount: guideItem.hobbies.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Card(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 0.h, horizontal: 1.w),
-                              color: AppColors.fireOpal,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: SizedBox(
-                                height: 6.h,
-                                child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 1.0.w, right: 1.0.w),
-                                    child: Text(
-                                      guideItem.hobbies[index],
-                                      maxLines: 1,
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
                 ],
               )
             ],
