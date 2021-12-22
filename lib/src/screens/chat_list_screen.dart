@@ -120,165 +120,172 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               return const Center(
                                 child: CircularProgressIndicator(),
                               );
-                            }
-
-                            final tripDocs = snapshot.data.docs as List;
-
-                            tripDocs.sort((a, b) => a['lastMessageTime']
-                                .compareTo(b['lastMessageTime']));
-                            return ListView.builder(
-                              itemCount: tripDocs.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Card(
-                                      elevation: 0,
-                                      child: ListTile(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                  tripId: tripDocs[index]['id'],
-                                                  otherUserId: tripDocs[index]
-                                                      [otherUserIdField]),
+                            } else {
+                              final tripDocs = snapshot.data.docs as List;
+                              tripDocs.sort((a, b) => a['lastMessageTime']
+                                  .compareTo(b['lastMessageTime']));
+                              return ListView.builder(
+                                itemCount: tripDocs.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Card(
+                                        elevation: 0,
+                                        child: ListTile(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChatScreen(
+                                                        tripId: tripDocs[index]
+                                                            ['id'],
+                                                        otherUserId: tripDocs[
+                                                                index]
+                                                            [otherUserIdField]),
+                                              ),
+                                            );
+                                            //tripDocs[index]['id']  gönderilicek
+                                          },
+                                          leading: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxHeight: 15.h,
                                             ),
-                                          );
-                                          //tripDocs[index]['id']  gönderilicek
-                                        },
-                                        leading: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxHeight: 15.h,
+                                            child: Image.asset(
+                                                userRole != 'UserRole.guide'
+                                                    ? "assets/images/Saly-11.png"
+                                                    : "assets/images/Saly-1.png",
+                                                fit: BoxFit.cover),
                                           ),
-                                          child: Image.asset(
-                                              userRole != 'UserRole.guide' ? "assets/images/Saly-11.png": "assets/images/Saly-1.png"
-                                              ,
-                                              fit: BoxFit.cover),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: 55.w,
-                                              child: Text(
-                                                tripDocs[index][otherUserName],
-                                                // chatList[index].contact.name,
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 4.h,
-                                              width: 4.h,
-                                              margin: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: tripDocs[index][
-                                                              'guideAcceptance'] ==
-                                                          null
-                                                      ? Colors.red
-                                                      : tripDocs[index][
-                                                                  'touristAcceptance'] ==
-                                                              null
-                                                          ? Colors.red
-                                                          : tripDocs[index][
-                                                                      'guideAcceptance'] &&
-                                                                  tripDocs[
-                                                                          index]
-                                                                      [
-                                                                      'touristAcceptance']
-                                                              ? Colors.green
-                                                              : Colors.red,
-                                                  shape: BoxShape.circle),
-                                              child: tripDocs[index]
-                                                          ['guideAcceptance'] ==
-                                                      null
-                                                  ? Icon(
-                                                      Icons.close,
-                                                      color: Colors.white,
-                                                      size: 3.5.h,
-                                                    )
-                                                  : tripDocs[index][
-                                                              'touristAcceptance'] ==
-                                                          null
-                                                      ? Icon(
-                                                          Icons.close,
-                                                          color: Colors.white,
-                                                          size: 3.5.h,
-                                                        )
-                                                      : tripDocs[index][
-                                                                  'guideAcceptance'] &&
-                                                              tripDocs[index][
-                                                                  'touristAcceptance']
-                                                          ? Icon(
-                                                              Icons.check,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 3.5.h,
-                                                            )
-                                                          : Icon(
-                                                              Icons.close,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 3.5.h,
-                                                            ),
-                                            )
-                                          ],
-                                        ),
-                                        subtitle: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: 45.w,
-                                              child: Text(
-                                                tripDocs[index]['lastMessage'],
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 20.w,
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: 55.w,
                                                 child: Text(
-                                                  DateTime.fromMicrosecondsSinceEpoch(tripDocs[index]['lastMessageTime'].microsecondsSinceEpoch)
-                                                              .day ==
-                                                          DateTime.now().day
-                                                      ? DateTime.fromMicrosecondsSinceEpoch(
-                                                                  tripDocs[index]['lastMessageTime']
-                                                                      .microsecondsSinceEpoch)
-                                                              .hour
-                                                              .toString() +
-                                                          ":" +
-                                                          DateTime.fromMicrosecondsSinceEpoch(
-                                                                  tripDocs[index][
-                                                                          'lastMessageTime']
-                                                                      .microsecondsSinceEpoch)
-                                                              .minute
-                                                              .toString()
-                                                      : DateTime.fromMicrosecondsSinceEpoch(
-                                                              tripDocs[index]
-                                                                      ['lastMessageTime']
-                                                                  .microsecondsSinceEpoch)
-                                                          .toString(),
-
+                                                  tripDocs[index]
+                                                      [otherUserName],
+                                                  // chatList[index].contact.name,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                   maxLines: 1,
-                                                  //overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Container(
+                                                height: 4.h,
+                                                width: 4.h,
+                                                margin: const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: tripDocs[index][
+                                                                'guideAcceptance'] ==
+                                                            null
+                                                        ? Colors.red
+                                                        : tripDocs[index][
+                                                                    'touristAcceptance'] ==
+                                                                null
+                                                            ? Colors.red
+                                                            : tripDocs[index][
+                                                                        'guideAcceptance'] &&
+                                                                    tripDocs[
+                                                                            index]
+                                                                        [
+                                                                        'touristAcceptance']
+                                                                ? Colors.green
+                                                                : Colors.red,
+                                                    shape: BoxShape.circle),
+                                                child: tripDocs[index][
+                                                            'guideAcceptance'] ==
+                                                        null
+                                                    ? Icon(
+                                                        Icons.close,
+                                                        color: Colors.white,
+                                                        size: 3.5.h,
+                                                      )
+                                                    : tripDocs[index][
+                                                                'touristAcceptance'] ==
+                                                            null
+                                                        ? Icon(
+                                                            Icons.close,
+                                                            color: Colors.white,
+                                                            size: 3.5.h,
+                                                          )
+                                                        : tripDocs[index][
+                                                                    'guideAcceptance'] &&
+                                                                tripDocs[index][
+                                                                    'touristAcceptance']
+                                                            ? Icon(
+                                                                Icons.check,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 3.5.h,
+                                                              )
+                                                            : Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 3.5.h,
+                                                              ),
+                                              )
+                                            ],
+                                          ),
+                                          subtitle: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              SizedBox(
+                                                width: 45.w,
+                                                child: Text(
+                                                  tripDocs[index]
+                                                      ['lastMessage'],
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 20.w,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Text(
+                                                    DateTime.fromMicrosecondsSinceEpoch(tripDocs[index]['lastMessageTime'].microsecondsSinceEpoch)
+                                                                .day ==
+                                                            DateTime.now().day
+                                                        ? DateTime.fromMicrosecondsSinceEpoch(
+                                                                    tripDocs[index]['lastMessageTime']
+                                                                        .microsecondsSinceEpoch)
+                                                                .hour
+                                                                .toString() +
+                                                            ":" +
+                                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                                    tripDocs[index][
+                                                                            'lastMessageTime']
+                                                                        .microsecondsSinceEpoch)
+                                                                .minute
+                                                                .toString()
+                                                        : DateTime.fromMicrosecondsSinceEpoch(
+                                                                tripDocs[index]
+                                                                        ['lastMessageTime']
+                                                                    .microsecondsSinceEpoch)
+                                                            .toString(),
+
+                                                    maxLines: 1,
+                                                    //overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                                    ],
+                                  );
+                                },
+                              );
+                            }
                           }),
                     ),
                   ],

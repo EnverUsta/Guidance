@@ -9,8 +9,8 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final UserService userService = UserService();
 
 class TripService {
-  Future<void> createTrip(String guideId, DateTime goalDate, String goalCountry,
-      String goalCity) async {
+  Future<String> createTrip(String guideId, DateTime goalDate,
+      String goalCountry, String goalCity) async {
     late String guideName;
     late String touristName;
     await userService.getUserById(guideId).then((value) {
@@ -27,6 +27,10 @@ class TripService {
       touristId: _auth.currentUser!.uid.toString(),
       guideName: guideName,
       touristName: touristName,
+      guideAcceptance: null,
+      touristAcceptance: null,
+      lastMessageTime: DateTime.now(),
+      lastMessage: '',
     );
     try {
       final result = await FirebaseFirestore.instance
@@ -37,6 +41,7 @@ class TripService {
           .collection('trips')
           .doc(result.id)
           .update(trip.toJson());
+      return result.id;
     } catch (e) {
       rethrow;
     }

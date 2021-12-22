@@ -5,6 +5,7 @@ import 'package:guidance/src/constants/app_colors.dart';
 import 'package:guidance/src/models/enum/user_role.dart';
 import 'package:guidance/src/models/guide_info.dart';
 import 'package:guidance/src/models/user_model.dart';
+import 'package:guidance/src/screens/chat_screen.dart';
 import 'package:guidance/src/utils/services/guide_info_service.dart';
 import 'package:guidance/src/utils/services/trip_service.dart';
 import 'package:guidance/src/utils/services/user_service.dart';
@@ -35,7 +36,12 @@ updateGuideInfo(String newIntro, List<String> newhobbies) async {
 
 class GuideProfileScreen extends StatefulWidget {
   final GuideInfo? guideInfo;
-  const GuideProfileScreen({Key? key, this.guideInfo}) : super(key: key);
+  final DateTime? goalDate;
+  final String? country;
+  final String? city;
+  const GuideProfileScreen(
+      {Key? key, this.guideInfo, this.goalDate, this.country, this.city})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -131,7 +137,42 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                   SizedBox(
                     height: 4.h,
                   ),
-                  if (userRole == UserRole.tourist) _buildRequestButton(),
+                  if (userRole == UserRole.tourist)
+                    SizedBox(
+                      height: 7.h,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          TripService tripService = TripService();
+                          try {
+                            final tripId = await tripService.createTrip(
+                              guide.userId,
+                              widget.goalDate as DateTime,
+                              widget.country as String,
+                              widget.city as String,
+                            );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => ChatScreen(
+                                  tripId: tripId,
+                                  otherUserId: guide.userId,
+                                ),
+                              ),
+                            );
+                          } catch (e) {}
+                        },
+                        child: const Text('Request'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFF7AAC5D),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             );
@@ -141,27 +182,6 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
             );
           }
         },
-      ),
-    );
-  }
-
-  SizedBox _buildRequestButton() {
-    TripService tripService = TripService();
-    return SizedBox(
-      height: 7.h,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: const Text('Request'),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            const Color(0xFF7AAC5D),
-          ),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
       ),
     );
   }
