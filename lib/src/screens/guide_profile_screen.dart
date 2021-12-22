@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guidance/src/constants/app_colors.dart';
@@ -145,8 +146,21 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                     guide.introducion,
                     introductionController,
                   ),
-                  _buildHobbiesText(guide),
-                  _buildHobbyItems(guide.hobbies),
+                  SizedBox(
+                    height: 2.5.h,
+                  ),
+                  Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _buildHobbiesText(guide),
+                        _buildHobbyItems(guide.hobbies),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     height: 4.h,
                   ),
@@ -370,11 +384,11 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
   }
 
   Widget _buildHobbyItems(List<String> hobbies) {
-    return SizedBox(
-      height: 4.5.h,
+    return Container(
+      margin: EdgeInsets.only(left: 1.5.h),
+      height: 7.5.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
         key: Key(hobbies.length.toString()),
         itemCount: hobbies.length,
         itemBuilder: (context, index) {
@@ -414,17 +428,6 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  // child: TextFormField(
-                  //   initialValue: hobbies[index],
-                  //   onFieldSubmitted: (value) => {},
-                  //   decoration: InputDecoration(
-                  //       contentPadding: EdgeInsets.only(bottom: 5.w),
-                  //       border: InputBorder.none),
-                  //   style: TextStyle(
-                  //     fontSize: 14.sp,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
                 ),
                 IconButton(
                   onPressed: () {
@@ -470,39 +473,34 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
 
   Widget _buildHobbiesText(GuideInfo guideInfo) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 0),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.6.h, horizontal: 4.w),
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Hobbies",
-                style: GoogleFonts.nunito(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.fireOpal),
-              ),
-              editToggle
-                  ? SizedBox(
-                      height: 7.h,
-                      child: Card(
-                        child: IconButton(
-                          onPressed: () async {
-                            await _showMyDialog(guideInfo);
-                          },
-                          icon: const Icon(Icons.add),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      height: 7.h,
-                    )
-            ],
+      margin: EdgeInsets.only(left: 2.h, top: 2.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Hobbies",
+            style: GoogleFonts.nunito(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.fireOpal,
+            ),
           ),
-        ),
+          editToggle
+              ? SizedBox(
+                  height: 7.h,
+                  child: Card(
+                    child: IconButton(
+                      onPressed: () async {
+                        await _showMyDialog(guideInfo);
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ),
+                )
+              : Container(
+                  height: 7.h,
+                )
+        ],
       ),
     );
   }

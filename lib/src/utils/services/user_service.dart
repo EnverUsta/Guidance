@@ -20,7 +20,7 @@ class UserService {
         gis.createGuideInfo(user.name, user.surname, user.id, '', hobbies);
       }
     } catch (e) {
-      print('Error in createUser');
+      rethrow;
     }
   }
 

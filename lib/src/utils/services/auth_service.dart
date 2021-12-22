@@ -43,8 +43,7 @@ class AuthService {
   Future<bool?> signInWithEmailAndPassword(
       String email, String password, UserRole role) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       UserModel um = await userService.getUserInfo(email);
 
@@ -59,8 +58,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
-      return null;
+      rethrow;
     }
   }
 }

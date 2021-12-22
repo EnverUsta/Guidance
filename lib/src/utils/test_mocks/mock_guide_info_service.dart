@@ -44,9 +44,9 @@ class MGuideInfoService {
         await _firestore.collection('guideInfos').get();
 
     List<GuideInfo> guideInfos = [];
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       guideInfos.add(GuideInfo.fromJson(element.data()));
-    });
+    }
     return guideInfos;
   }
 

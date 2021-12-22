@@ -21,7 +21,7 @@ class ChatService {
       //Update Trip
       tripService.updateLastMessageofTrip(tripId, message, chat.ctime);
     } catch (e) {
-      print('Error in createChat');
+      rethrow;
     }
   }
 
