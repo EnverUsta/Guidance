@@ -361,16 +361,8 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               )
             else
               Padding(
-                padding: EdgeInsets.only(top: 1.h),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  readOnly: true,
-                  enabled: false,
-                  controller: introductionController,
-                ),
-              ),
+                  padding: EdgeInsets.only(top: 1.h),
+                  child: Text(introductionController.text)),
           ],
         ),
       ),
