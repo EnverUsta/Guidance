@@ -199,10 +199,10 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 1.5,
+                  blurRadius: 2,
+                  offset: const Offset(1, 3), // changes position of shadow
                 ),
               ],
             ),
@@ -219,7 +219,12 @@ class _GuideProfileScreenState extends State<GuideProfileScreen> {
                     editToggle = !editToggle;
                   });
                 },
-                icon: const Icon(Icons.drive_file_rename_outline_outlined),
+                icon: (editToggle)
+                    ? const Icon(Icons.save_outlined,
+                        color: AppColors.raisinBlack)
+                    : const Icon(Icons.drive_file_rename_outline_outlined,
+                        color: AppColors
+                            .raisinBlack), //edit toggle?show this: show that
               ),
             ),
           ),
