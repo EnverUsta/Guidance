@@ -9,6 +9,17 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final UserService userService = UserService();
 
 class TripService {
+  Future<bool> doesTripExist(String guideId) async {
+    final touristId = _auth.currentUser!.uid;
+    final tripList = await FirebaseFirestore.instance.collection('trips').get();
+    for (var element in tripList.docs) {
+      if (element['guideId'] == guideId && element['touristId'] == touristId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future<String> createTrip(String guideId, DateTime goalDate,
       String goalCountry, String goalCity) async {
     late String guideName;
