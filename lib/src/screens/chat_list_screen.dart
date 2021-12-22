@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guidance/src/screens/chat_screen.dart';
@@ -182,11 +183,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                     color: tripDocs[index][
                                                                 'guideAcceptance'] ==
                                                             null
-                                                        ? Colors.red
+                                                        ? Colors.white
                                                         : tripDocs[index][
                                                                     'touristAcceptance'] ==
                                                                 null
-                                                            ? Colors.red
+                                                            ? Colors.white
                                                             : tripDocs[index][
                                                                         'guideAcceptance'] &&
                                                                     tripDocs[
@@ -199,19 +200,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                 child: tripDocs[index][
                                                             'guideAcceptance'] ==
                                                         null
-                                                    ? Icon(
-                                                        Icons.close,
-                                                        color: Colors.white,
-                                                        size: 3.5.h,
-                                                      )
+                                                    ? SizedBox(height: 3.5.h)
                                                     : tripDocs[index][
                                                                 'touristAcceptance'] ==
                                                             null
-                                                        ? Icon(
-                                                            Icons.close,
-                                                            color: Colors.white,
-                                                            size: 3.5.h,
-                                                          )
+                                                        ? SizedBox(
+                                                            height: 3.5.h)
                                                         : tripDocs[index][
                                                                     'guideAcceptance'] &&
                                                                 tripDocs[index][
@@ -251,24 +245,19 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                   alignment:
                                                       Alignment.bottomRight,
                                                   child: Text(
-                                                    DateTime.fromMicrosecondsSinceEpoch(tripDocs[index]['lastMessageTime'].microsecondsSinceEpoch)
-                                                                .day ==
-                                                            DateTime.now().day
-                                                        ? DateTime.fromMicrosecondsSinceEpoch(
-                                                                    tripDocs[index]['lastMessageTime']
-                                                                        .microsecondsSinceEpoch)
-                                                                .hour
-                                                                .toString() +
-                                                            ":" +
-                                                            DateTime.fromMicrosecondsSinceEpoch(
-                                                                    tripDocs[index][
+                                                    DateTime.fromMicrosecondsSinceEpoch(
+                                                                    tripDocs[index]
+                                                                            [
                                                                             'lastMessageTime']
                                                                         .microsecondsSinceEpoch)
-                                                                .minute
-                                                                .toString()
+                                                                .day ==
+                                                            DateTime.now().day
+                                                        ? printHours(tripDocs[
+                                                                index]
+                                                            ['lastMessageTime'])
                                                         : DateTime.fromMicrosecondsSinceEpoch(
-                                                                tripDocs[index]
-                                                                        ['lastMessageTime']
+                                                                tripDocs[index][
+                                                                        'lastMessageTime']
                                                                     .microsecondsSinceEpoch)
                                                             .toString(),
 
@@ -298,5 +287,18 @@ class _ChatListScreenState extends State<ChatListScreen> {
             }),
       ),
     );
+  }
+
+  printHours(Timestamp messageTime) {
+    var hour =
+        DateTime.fromMicrosecondsSinceEpoch(messageTime.microsecondsSinceEpoch)
+            .hour;
+
+    var minute =
+        DateTime.fromMicrosecondsSinceEpoch(messageTime.microsecondsSinceEpoch)
+            .minute;
+    String hourString = hour < 10 ? '0' + hour.toString() : hour.toString();
+    String minuteString = minute < 10 ? '0' + minute.toString() : minute.toString();
+    return hourString + ":" + minuteString;
   }
 }
