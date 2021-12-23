@@ -9,7 +9,7 @@ Turistler gideceği şehri ve gezi tarihini seçerek o şehirde bulunan rehberle
  - Lise öğrencilerinin para kazanmalarını sağlamak.
 
 ## Projenin Kapsamı
-Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliştirme kiti olan Flutter kullanılacaktır. Back-end kısmında ise yine Google tarafından geliştirilen Dart dili kullanılacaktır. Uygulamadaki veriler yerel ve uzak sunucularda tutulacaktır. Yerel verilerin tutulması için SQLite, uzak verilerin tutulması için ise Firebase kullanılacaktır.
+Projede Google tarafından oluşturulan açık kaynaklı bir UI yazılım geliştirme kiti olan Flutter kullanılacaktır. Back-end kısmında ise yine Google tarafından geliştirilen Dart dili kullanılacaktır. Uygulamadaki veriler uzak sunucuda tutulacaktır. Verilerin tutulması için ise Firebase kullanılacaktır.
 
 ## Projenin Başarı Ölçütleri
 
